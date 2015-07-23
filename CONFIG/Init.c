@@ -16,8 +16,8 @@
 
 /** Extern Variables & Functions *******************/
 extern void USB_Task(void);
-extern unsigned char rxRawBuffer[RX_BUFSIZE];
-extern unsigned char txRawBuffer[TX_BUFSIZE];
+extern unsigned char ReceivedDataBuffer[RX_BUFSIZE];
+extern unsigned char ToSendDataBuffer[TX_BUFSIZE];
 
 /***************************************************
  * Function:        void Init(void)
@@ -207,8 +207,8 @@ void InitializeDevice(void)
 void InitializeUser(void)
 {
 	//	Buffer init
-	memset(rxRawBuffer, 0, RX_BUFSIZE);
-	memset(txRawBuffer, 0, TX_BUFSIZE);
+	memset(ReceivedDataBuffer, 0, RX_BUFSIZE);
+	memset(ToSendDataBuffer, 0, TX_BUFSIZE);
 }
 
 /***************************************************
@@ -225,10 +225,11 @@ void MainLooper(void)
 		T50MS_Flag = FALSE;
 		USB_Task();		//	If connected to host, commnuicate by host. rx, tx.
 	}
-
+	
 	if(T10MS_Flag)
 	{
 		T10MS_Flag = FALSE;
 		PCR_Task();
 	}
 }
+

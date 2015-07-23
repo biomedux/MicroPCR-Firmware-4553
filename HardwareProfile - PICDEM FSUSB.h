@@ -111,6 +111,7 @@
 	#define LED_TEST_OFF()				LED_TEST = 0;
 	#define LED_CAMERA_ON()         	LED_CAMERA = 0; 
     #define LED_CAMERA_OFF()        	LED_CAMERA = 1;
+	#define LED_TEST_TOGGLE()			LED_TEST = !LED_TEST;
 #else
 	#define LED_TEST_ON()				LED_TEST = 0;
 	#define LED_TEST_OFF()				LED_TEST = 1;

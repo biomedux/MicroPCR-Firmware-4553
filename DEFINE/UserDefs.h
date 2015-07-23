@@ -40,7 +40,12 @@ typedef struct _RXBUFFER
 	BYTE pid_d3;
 	BYTE pid_d4;
 
-	BYTE reserved_for_64byte[48];
+	BYTE integralMax_1;
+	BYTE integralMax_2;
+	BYTE integralMax_3;
+	BYTE integralMax_4;
+
+	BYTE reserved_for_64byte[44];
 } RxBuffer;
 
 typedef struct _TXBUFFER
@@ -70,17 +75,16 @@ typedef enum _STATE				//	Device State.
 {								//  Used in PCR_Task.c
 	STATE_READY = 0x00,
 	STATE_RUNNING,
-	STATE_PID_READING
+	STATE_PAN_RUNNING,
 } STATE;
 
 typedef enum _COMMAND			//	Rx_Buffer[0] = Set Command
 {								//  Used in PCR_Task.c
 	CMD_READY = 0x00,
-	CMD_PID_WRITE,
-	CMD_PID_END,
 	CMD_PCR_RUN,
 	CMD_PCR_STOP,
-	CMD_REQUEST_LINE,
+	CMD_FAN_ON,
+	CMD_FAN_OFF,
 	CMD_BOOTLOADER = 0x55
 } COMMAND;
 
@@ -89,16 +93,6 @@ typedef enum _ERROR
 	ERROR_NO = 0x00,
 	ERROR_ASSERT,
 } ERROR;
-
-//	Parameter Info Structure
-typedef struct _PID
-{
-	BYTE startTemp;
-	BYTE targetTemp;
-	float p;
-	float i;
-	float d;
-} PID;
 
 // Temperature Sampling Count
 #define SAMPLING_COUNT			10

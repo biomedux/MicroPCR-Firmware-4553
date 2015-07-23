@@ -9,19 +9,15 @@
 #include "./PCR/PCRTask.h"
 #include "./DEFINE/UserDefs.h"
 #include "./DEFINE/GlobalTypeVars.h"
+#include "./PCR/Temp_Table.h"
 #include <math.h>
 
 // in UsbTask.c
-extern unsigned char rxRawBuffer[RX_BUFSIZE];
-extern unsigned char txRawBuffer[TX_BUFSIZE];
-
-PID pids[MAX_PID_COUNT];
+extern unsigned char ReceivedDataBuffer[RX_BUFSIZE];
+extern unsigned char ToSendDataBuffer[TX_BUFSIZE];
 
 BYTE prevState = STATE_READY;
 BYTE currentState = STATE_READY;
-
-BYTE pidIndex = 0x00;
-BYTE totalPidCount = 0x00; 
 
 BYTE chamber_h = 0x00;
 BYTE chamber_l = 0x00;
@@ -34,14 +30,16 @@ BYTE request_data = 0x00;
 
 // For calculating the temperature.
 float currentTemp = 0x00;
-double temp_buffer[5], temp_buffer2[5];
+float temp_buffer[5], temp_buffer2[5];
 
 // For pid controls
 BYTE prevTargetTemp = 25;
 BYTE currentTargetTemp = 25;
 double lastIntegral = 0;
 double lastError = 0;
-double kp = 0x00, ki = 0x00, kd = 0x00;
+
+float kp = 0, ki = 0, kd = 0;
+float integralMax = 2600.0;
 
 /**********************************
 * Function : void PCR_Task(void)
@@ -51,8 +49,8 @@ void PCR_Task(void)
 {
 	// copy the raw buffer to structed buffer.
 	// and clear previous raw buffer(important)
-	memcpy(&rxBuffer, rxRawBuffer, RX_BUFSIZE);
-	memset(rxRawBuffer, 0, RX_BUFSIZE);
+	memcpy(&rxBuffer, ReceivedDataBuffer, RX_BUFSIZE);
+	memset(ReceivedDataBuffer, 0, RX_BUFSIZE);
 
 	// Check the cmd buffer, performing the specific task.
 	Command_Setting();
@@ -170,11 +168,16 @@ double quickSort(float *d, int n)
 * photodiode_h, photodiode_l are adc valoe of photodiode.
 * currentTemp is chip's temperature by calculated from chamber value.
 **********************************/
+extern struct{BYTE ntc_chamber[NTC_CHAMBER_SIZE];}NTC_CHAMBER_TABLE;
+
+ROM BYTE *pTemp_Chamber = (ROM BYTE *)&NTC_CHAMBER_TABLE;
+
 void Sensor_Task(void)
 {
 	double r, InRs, tmp, adc;
 	WORD chamber = ReadTemperature(ADC_CHAMBER);
 	WORD photodiode = ReadPhotodiode();
+	WORD index = 0;
 
 	// save the adc value by high low type
 	chamber_h = (BYTE)(chamber>>8);
@@ -183,19 +186,9 @@ void Sensor_Task(void)
 	photodiode_l = (BYTE)(photodiode);
 
 	// temperature calculation
-	adc = ((double)(chamber_h & 0x0f)*255. + (double)(chamber_l))/4.0;
-	currentTemp = 0;
-
-	// the Rref, A_VAL, B_VAL, C_VAL, K are defined in UserDefs.h file
-	if( adc != 0 )
-	{
-		r = Rref * (1024.0 / adc - 1.0);
-		InRs = log(r);
-		tmp = A_VAL + B_VAL *InRs + C_VAL * pow(InRs,3.);
-
-		currentTemp = 1./tmp-K;
-	}
-
+	index = (WORD)((chamber/4) * 2.);
+	currentTemp = (float)(pTemp_Chamber[index]) + (float)(pTemp_Chamber[index+1] * 0.1);
+	
 	// for median filtering
 	temp_buffer[0] = temp_buffer[1];
 	temp_buffer[1] = temp_buffer[2];
@@ -203,8 +196,8 @@ void Sensor_Task(void)
 	temp_buffer[3] = temp_buffer[4];
 	temp_buffer[4] = currentTemp;
 
-	memcpy(temp_buffer2, temp_buffer, 5*sizeof(double));
-	
+	memcpy(temp_buffer2, temp_buffer, 5*sizeof(float));
+
 	currentTemp = (float)quickSort(temp_buffer2, 5);
 }
 
@@ -212,15 +205,11 @@ void Sensor_Task(void)
 * Function : void Command_Setting(void)
 * The command list was listed in below.
 	* CMD_READY = 0x00,
-	* CMD_PID_WRITE,
-	* CMD_PID_END,
 	* CMD_PCR_RUN,
 	* CMD_PCR_STOP,
 	* CMD_REQUEST_LINE,
 	* CMD_BOOTLOADER = 0x55
  - The 'CMD_READY' command is common operation.
- - The 'CMD_PID_WRITE' command is used to store PID values.
- - The 'CMD_PID_END' command is used to change the state of pid write mode.
  - The 'CMD_PCR_RUN' command is used to run the PCR, but, the pid value must exist.
  - The 'CMD_PCR_STOP' command is used to stop the PCR.
  - The 'CMD_REQUEST_LINE' command is not used.
@@ -235,52 +224,21 @@ void Command_Setting(void)
 	switch( rxBuffer.cmd )
 	{
 		case CMD_READY:
-			break;
-		// PID write mode enable in STATE_READY.
-		case CMD_PID_WRITE:
-			// if the first of this state, reset all of the variables.
-			if( currentState == STATE_READY )
-			{
-				// Change the state
-				currentState = STATE_PID_READING;
-
-				for(i=0; i<MAX_PID_COUNT; ++i)
-					memset(&pids[i], 0, sizeof(PID));
-
-				pidIndex = 0;
-				totalPidCount = 0;
-				PIDRead_Task();
-			}
-			// already STATE_PID_READING mode, go PIDRead_Task()
-			else if( currentState == STATE_PID_READING )	
-				PIDRead_Task();
-			else
-				currentError = ERROR_ASSERT;
-			break;
-		case CMD_PID_END:
-			if( currentState == STATE_PID_READING )
-			{
-				currentState = STATE_READY;
-				totalPidCount = pidIndex;
-			}
-			else
-				currentError = ERROR_ASSERT;
+			if( currentState == STATE_RUNNING )
+				Run_Task();
 			break;
 		case CMD_PCR_RUN:
-			if( currentState == STATE_READY && 
-				totalPidCount != 0 )
+			if( currentState == STATE_READY )
 			{
 				Init_PWM_MODE();
 				currentState = STATE_RUNNING;
-				kp = 0x00;	ki = 0x00;	kd = 0x00;
 				lastIntegral = 0;
 				lastError = 0;
 				prevTargetTemp = currentTargetTemp = 25;
 
 				Run_Task();
 			}
-			else if( currentState == STATE_RUNNING &&
-					 totalPidCount != 0 )
+			else if( currentState == STATE_RUNNING )
 			{
 				Run_Task();
 			}
@@ -293,57 +251,53 @@ void Command_Setting(void)
 				currentState = STATE_READY;
 				Stop_Task();
 			}
-			else if( currentState == STATE_PID_READING )
+			else
 				currentError = ERROR_ASSERT;
 			break;
+		case CMD_FAN_ON:
+			if( currentState == STATE_READY )
+			{
+				currentState = STATE_PAN_RUNNING;
+				Fan_ON();
+			}
+			else if( currentState != STATE_PAN_RUNNING )
+				currentError = ERROR_ASSERT;
+			break;
+		case CMD_FAN_OFF:
+			if( currentState == STATE_PAN_RUNNING )
+			{
+				currentState = STATE_READY;
+				Fan_OFF();
+			}
+			else
+			{
+				currentError = ERROR_ASSERT;
+				LED_TEST_ON();
+			}
+			break;
 	}
-}
-
-void PIDRead_Task(void)
-{
-	// assume the pc is not sending the pid that over the maximum count of pids.
-	// so, we need not exception this problem.
-	pids[pidIndex].startTemp = rxBuffer.startTemp;
-	pids[pidIndex].targetTemp = rxBuffer.targetTemp;
-	
-	memcpy(&pids[pidIndex].p, &rxBuffer.pid_p1, sizeof(float));
-	memcpy(&pids[pidIndex].i, &rxBuffer.pid_i1, sizeof(float));
-	memcpy(&pids[pidIndex].d, &rxBuffer.pid_d1, sizeof(float));
-
-	pidIndex++;
 }
 
 void Run_Task(void)
 {
 	double currentErr = 0, proportional = 0, integral = 0;
 	double derivative = 0;
-	WORD pwmValue = 0xffff;
-	int paramIdx = 0;
+	int pwmValue = 0xffff;
 
-	if( currentTargetTemp != rxBuffer.currentTargetTemp )
+	if( rxBuffer.cmd == CMD_PCR_RUN && 
+		currentTargetTemp != rxBuffer.currentTargetTemp )
 	{
 		prevTargetTemp = currentTargetTemp;
 		currentTargetTemp = rxBuffer.currentTargetTemp;
 
-		if( !fabs(prevTargetTemp - currentTargetTemp) < .5 )
+		if ( !(fabs(prevTargetTemp - currentTargetTemp) < .5) ) 
 		{
-			if( currentTargetTemp > 94.5 )
-				paramIdx = 0;
-			else if( currentTargetTemp > 71.5 )
-				paramIdx = 2;
-			else if( currentTargetTemp > 59.5 )
-				paramIdx = 3;
-	
-			kp = pids[paramIdx].p;
-			ki = pids[paramIdx].i;
-			kd = pids[paramIdx].d;
-	
 			lastIntegral = 0;
 			lastError = 0;
 		}
 	}
 	
-	if( prevTargetTemp > currentTargetTemp )
+	if(	prevTargetTemp > currentTargetTemp )
 	{
 		if( currentTemp-currentTargetTemp <= FAN_STOP_TEMPDIF )
 		{
@@ -359,12 +313,21 @@ void Run_Task(void)
 		Fan_OFF();
 	}
 	
+	// read pid values from buffer
+	if( rxBuffer.cmd == CMD_PCR_RUN )
+	{
+		memcpy(&kp, &(rxBuffer.pid_p1), sizeof(float));
+		memcpy(&ki, &(rxBuffer.pid_i1), sizeof(float));
+		memcpy(&kd, &(rxBuffer.pid_d1), sizeof(float));
+		memcpy(&integralMax, &(rxBuffer.integralMax_1), sizeof(float));
+	}
+
 	currentErr = currentTargetTemp - currentTemp;
 	proportional = currentErr;
 	integral = currentErr + lastIntegral;
 
-	if( integral > INTGRALMAX )
-		integral = INTGRALMAX;
+	if( integral > integralMax )
+		integral = integralMax;
 	else if( integral < 0 )
 		integral = 0;
 
@@ -373,23 +336,13 @@ void Run_Task(void)
 				ki * integral +
 				kd * derivative;
 
-	if( pwmValue > 255 )
-		pwmValue = 255;
+	if( pwmValue > 1023 )
+		pwmValue = 1023;
 	else if( pwmValue < 0 )
 		pwmValue = 0;
 
-	pwmValue = fabs(pwmValue);
-
-	if( pwmValue == 255 )
-		pwmValue = 1023;
-	else
-	{
-		pwmValue = pwmValue / 100 * 1023.;	
-		if( pwmValue >= 1023 )
-			pwmValue = 1023;
-		else if( pwmValue <= 0 )
-			pwmValue = 0;
-	}
+	lastError = currentErr;
+	lastIntegral = integral;
 
 	CCPR1L = (BYTE)(pwmValue>>2);
 	CCP1CON = ((CCP1CON&0xCF) | (BYTE)((pwmValue&0x03)<<4));
@@ -424,5 +377,5 @@ void TxBuffer_Setting(void)
 	txBuffer.request_data = request_data;
 
 	// Copy the txBuffer struct to rawBuffer
-	memcpy(&txRawBuffer, &txBuffer, sizeof(TxBuffer));
+	memcpy(&ToSendDataBuffer, &txBuffer, sizeof(TxBuffer));
 }

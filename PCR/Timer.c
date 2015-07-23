@@ -64,9 +64,9 @@ void timer1_isr(void)
 		TMR1H = 0xFA; 	//	set duration high first
 		TMR1L = 0x23;  	//	set duration low
 
-		if( T10MS_Counter >= 5 )
+		if( T10MS_Counter >= 2 )
 		{
-			T10MS_Flag = TRUE;		//	set 100ms flag	
+			T10MS_Flag = TRUE;
 			T10MS_Counter = 0;	
 			T50MS_Counter++;
 		}

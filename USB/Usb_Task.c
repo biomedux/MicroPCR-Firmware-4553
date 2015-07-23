@@ -28,8 +28,8 @@
     #pragma udata
 #endif
 
-unsigned char rxRawBuffer[RX_BUFSIZE];
-unsigned char txRawBuffer[TX_BUFSIZE];
+unsigned char ReceivedDataBuffer[RX_BUFSIZE];
+unsigned char ToSendDataBuffer[TX_BUFSIZE];
 
 #pragma udata
 
@@ -62,13 +62,13 @@ void USB_Task(void)
 		//Send data to host
 		if (!HIDTxHandleBusy(USBInHandle))                        	
 		{			
-			USBInHandle = HIDTxPacket(HID_EP,(BYTE*)&txRawBuffer[0], TX_BUFSIZE);
+			USBInHandle = HIDTxPacket(HID_EP,(BYTE*)&ToSendDataBuffer[0], TX_BUFSIZE);
 		}		
 
 		//Re-arm the OUT endpoint for the next packet
-		USBOutHandle = HIDRxPacket(HID_EP,(BYTE*)&rxRawBuffer, RX_BUFSIZE);
+		USBOutHandle = HIDRxPacket(HID_EP,(BYTE*)&ReceivedDataBuffer[0], RX_BUFSIZE);
 
-		Jump_Bootloader(rxRawBuffer[0]);
+		Jump_Bootloader(ReceivedDataBuffer[0]);
 	}
 }
 
@@ -369,7 +369,7 @@ void USBCBInitEP(void)
     //enable the HID endpoint
     USBEnableEndpoint(HID_EP,USB_IN_ENABLED|USB_OUT_ENABLED|USB_HANDSHAKE_ENABLED|USB_DISALLOW_SETUP);
     //Re-arm the OUT endpoint for the next packet
-    USBOutHandle = HIDRxPacket(HID_EP,(BYTE*)&rxRawBuffer,RX_BUFSIZE);
+    USBOutHandle = HIDRxPacket(HID_EP,(BYTE*)&ReceivedDataBuffer[0],RX_BUFSIZE);
 }
 
 /********************************************************************
