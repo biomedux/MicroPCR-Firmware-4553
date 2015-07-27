@@ -103,21 +103,21 @@
 	#define REVERSE_VOLT
 
     /** LED ************************************************************/
-	#define LED_WG		LATDbits.LATD0    
-	#define LED_R		LATDbits.LATD1
-	#define LED_G		LATDbits.LATD2
-	#define LED_B		LATDbits.LATD3
+	//#define LED_WG		LATDbits.LATD0    
+	//#define LED_R		LATDbits.LATD1
+	#define LED_B		LATDbits.LATD2
+	//#define LED_B		LATDbits.LATD3
 	
-	#define LED_WG_ON()         	LED_WG = 0; 
-    #define LED_WG_OFF()        	LED_WG = 1;
-	#define LED_R_ON()         		LED_R = 0; 
-    #define LED_R_OFF()        		LED_R = 1;
-	#define LED_G_ON()         		LED_G = 0; 
-    #define LED_G_OFF()        		LED_G = 1;
+	//#define LED_WG_ON()         	LED_WG = 0; 
+    //#define LED_WG_OFF()        	LED_WG = 1;
+	//#define LED_R_ON()         		LED_R = 0; 
+    //#define LED_R_OFF()        		LED_R = 1;
+	//#define LED_G_ON()         		LED_G = 0; 
+    //#define LED_G_OFF()        		LED_G = 1;
 	#define LED_B_ON()         		LED_B = 0; 
     #define LED_B_OFF()        		LED_B = 1;
 	
-	#define InitLEDs()	{TRISDbits.TRISD0=0;TRISDbits.TRISD1=0;TRISDbits.TRISD2=0;TRISDbits.TRISD3=0;LED_WG_OFF();LED_R_OFF();LED_G_OFF();LED_B_OFF();}
+	#define InitLEDs()	{TRISDbits.TRISD2=0;LED_B_OFF();}
 
 
     /** SWITCH *********************************************************/

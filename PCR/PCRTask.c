@@ -59,9 +59,9 @@ void PCR_Task(void)
 	Sensor_Task();
 	
 	if( rxBuffer.ledControl ){
-		LED_WG = rxBuffer.led_wg;
-		LED_R = rxBuffer.led_r;
-		LED_G = rxBuffer.led_g;
+		//LED_WG = rxBuffer.led_wg;
+		//LED_R = rxBuffer.led_r;
+		//LED_G = rxBuffer.led_g;
 		LED_B = rxBuffer.led_b;
 	}
 
