@@ -103,23 +103,22 @@
 	#define REVERSE_VOLT
 
     /** LED ************************************************************/
-	#define LED_TEST			   LATDbits.LATD0    
-	#define LED_CAMERA             LATDbits.LATD2
+	#define LED_WG		LATDbits.LATD0    
+	#define LED_R		LATDbits.LATD1
+	#define LED_G		LATDbits.LATD2
+	#define LED_B		LATDbits.LATD3
 	
-#ifdef REVERSE_VOLT
-	#define LED_TEST_ON()				LED_TEST = 1;
-	#define LED_TEST_OFF()				LED_TEST = 0;
-	#define LED_CAMERA_ON()         	LED_CAMERA = 0; 
-    #define LED_CAMERA_OFF()        	LED_CAMERA = 1;
-	#define LED_TEST_TOGGLE()			LED_TEST = !LED_TEST;
-#else
-	#define LED_TEST_ON()				LED_TEST = 0;
-	#define LED_TEST_OFF()				LED_TEST = 1;
-	#define LED_CAMERA_ON()         	LED_CAMERA = 1; 
-    #define LED_CAMERA_OFF()        	LED_CAMERA = 0;
-#endif
+	#define LED_WG_ON()         	LED_WG = 0; 
+    #define LED_WG_OFF()        	LED_WG = 1;
+	#define LED_R_ON()         		LED_R = 0; 
+    #define LED_R_OFF()        		LED_R = 1;
+	#define LED_G_ON()         		LED_G = 0; 
+    #define LED_G_OFF()        		LED_G = 1;
+	#define LED_B_ON()         		LED_B = 0; 
+    #define LED_B_OFF()        		LED_B = 1;
 	
-	#define InitLEDs()	{LED_CAMERA_ON(); LED_TEST_OFF();TRISDbits.TRISD2=0; TRISDbits.TRISD0=0;}
+	#define InitLEDs()	{TRISDbits.TRISD0=0;TRISDbits.TRISD1=0;TRISDbits.TRISD2=0;TRISDbits.TRISD3=0;LED_WG_OFF();LED_R_OFF();LED_G_OFF();LED_B_OFF();}
+
 
     /** SWITCH *********************************************************/
     #define InitSwitches()  TRISBbits.TRISB4=1;

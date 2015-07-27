@@ -58,6 +58,11 @@ void PCR_Task(void)
 	// Sensing the adc values(for photodiode, chamber, heatsink)
 	Sensor_Task();
 
+	LED_WG = rxBuffer.led_wg;
+	LED_R = rxBuffer.led_r;
+	LED_G = rxBuffer.led_g;
+	LED_B = rxBuffer.led_b;
+
 	// Setting the tx buffer by structed buffer.
 	TxBuffer_Setting();
 }
@@ -272,7 +277,6 @@ void Command_Setting(void)
 			else
 			{
 				currentError = ERROR_ASSERT;
-				LED_TEST_ON();
 			}
 			break;
 	}
@@ -310,7 +314,15 @@ void Run_Task(void)
 	}
 	else
 	{
-		Fan_OFF();
+		if( (currentTargetTemp-currentTemp) <= -1.0 && 
+			currentTargetTemp != prevTargetTemp )
+		{
+			Fan_ON();
+		}
+		else
+		{
+			Fan_OFF();
+		}
 	}
 	
 	// read pid values from buffer
@@ -328,8 +340,8 @@ void Run_Task(void)
 
 	if( integral > integralMax )
 		integral = integralMax;
-	else if( integral < 0 )
-		integral = 0;
+	else if( integral < -integralMax )
+		integral = -integralMax;
 
 	derivative = currentErr - lastError;
 	pwmValue = 	kp * proportional + 
