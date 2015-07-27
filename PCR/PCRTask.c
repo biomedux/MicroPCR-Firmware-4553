@@ -57,11 +57,13 @@ void PCR_Task(void)
 
 	// Sensing the adc values(for photodiode, chamber, heatsink)
 	Sensor_Task();
-
-	LED_WG = rxBuffer.led_wg;
-	LED_R = rxBuffer.led_r;
-	LED_G = rxBuffer.led_g;
-	LED_B = rxBuffer.led_b;
+	
+	if( rxBuffer.ledControl ){
+		LED_WG = rxBuffer.led_wg;
+		LED_R = rxBuffer.led_r;
+		LED_G = rxBuffer.led_g;
+		LED_B = rxBuffer.led_b;
+	}
 
 	// Setting the tx buffer by structed buffer.
 	TxBuffer_Setting();

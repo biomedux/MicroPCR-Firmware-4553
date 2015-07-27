@@ -45,12 +45,13 @@ typedef struct _RXBUFFER
 	BYTE integralMax_3;
 	BYTE integralMax_4;
 
+	BYTE ledControl;
 	BYTE led_wg;
 	BYTE led_r;
 	BYTE led_g;
 	BYTE led_b;
 
-	BYTE reserved_for_64byte[40];
+	BYTE reserved_for_64byte[39];
 } RxBuffer;
 
 typedef struct _TXBUFFER
@@ -100,7 +101,7 @@ typedef enum _ERROR
 } ERROR;
 
 // Temperature Sampling Count
-#define SAMPLING_COUNT			10
+#define SAMPLING_COUNT			20
 
 #define MAX_PID_COUNT			10
 
