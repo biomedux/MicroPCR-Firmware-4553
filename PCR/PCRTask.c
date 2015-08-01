@@ -47,9 +47,37 @@ float integralMax = 2600.0;
 **********************************/
 void PCR_Task(void)
 {
+	// 150801 yj 
+	// buffer copy directly not using memcpy function.
+	rxBuffer.cmd = ReceivedDataBuffer[0];
+	rxBuffer.currentTargetTemp = ReceivedDataBuffer[1];
+	rxBuffer.startTemp = ReceivedDataBuffer[2];
+	rxBuffer.targetTemp = ReceivedDataBuffer[3];
+	rxBuffer.pid_p1 = ReceivedDataBuffer[4];
+	rxBuffer.pid_p2 = ReceivedDataBuffer[5];
+	rxBuffer.pid_p3 = ReceivedDataBuffer[6];
+	rxBuffer.pid_p4 = ReceivedDataBuffer[7];
+	rxBuffer.pid_i1 = ReceivedDataBuffer[8];
+	rxBuffer.pid_i2 = ReceivedDataBuffer[9];
+	rxBuffer.pid_i3 = ReceivedDataBuffer[10];
+	rxBuffer.pid_i4 = ReceivedDataBuffer[11];	
+	rxBuffer.pid_d1 = ReceivedDataBuffer[12];
+	rxBuffer.pid_d2 = ReceivedDataBuffer[13];
+	rxBuffer.pid_d3 = ReceivedDataBuffer[14];
+	rxBuffer.pid_d4 = ReceivedDataBuffer[15];
+	rxBuffer.integralMax_1 = ReceivedDataBuffer[16];
+	rxBuffer.integralMax_2 = ReceivedDataBuffer[17];
+	rxBuffer.integralMax_3 = ReceivedDataBuffer[18];
+	rxBuffer.integralMax_4 = ReceivedDataBuffer[19];
+	rxBuffer.ledControl = ReceivedDataBuffer[20];
+	rxBuffer.led_wg = ReceivedDataBuffer[21];
+	rxBuffer.led_r = ReceivedDataBuffer[22];
+	rxBuffer.led_g = ReceivedDataBuffer[23];
+	rxBuffer.led_b = ReceivedDataBuffer[24];
+
 	// copy the raw buffer to structed buffer.
 	// and clear previous raw buffer(important)
-	memcpy(&rxBuffer, ReceivedDataBuffer, RX_BUFSIZE);
+	//memcpy(&rxBuffer, ReceivedDataBuffer, sizeof(RxBuffer));
 	memset(ReceivedDataBuffer, 0, RX_BUFSIZE);
 
 	// Check the cmd buffer, performing the specific task.
@@ -62,7 +90,7 @@ void PCR_Task(void)
 		//LED_WG = rxBuffer.led_wg;
 		//LED_R = rxBuffer.led_r;
 		//LED_G = rxBuffer.led_g;
-		LED_B = rxBuffer.led_b;
+		// LED_B = rxBuffer.led_b;
 	}
 
 	// Setting the tx buffer by structed buffer.
@@ -243,7 +271,7 @@ void Command_Setting(void)
 				lastError = 0;
 				prevTargetTemp = currentTargetTemp = 25;
 
-				Run_Task();
+			//	Run_Task();
 			}
 			else if( currentState == STATE_RUNNING )
 			{
@@ -289,6 +317,7 @@ void Run_Task(void)
 	double currentErr = 0, proportional = 0, integral = 0;
 	double derivative = 0;
 	int pwmValue = 0xffff;
+	BYTE tempBuf[4] = { 0, };
 
 	if( rxBuffer.cmd == CMD_PCR_RUN && 
 		currentTargetTemp != rxBuffer.currentTargetTemp )
@@ -305,7 +334,8 @@ void Run_Task(void)
 	
 	if(	prevTargetTemp > currentTargetTemp )
 	{
-		if( currentTemp-currentTargetTemp <= FAN_STOP_TEMPDIF )
+		if( currentTemp-currentTargetTemp <= FAN_STOP_TEMPDIF &&
+			currentTargetTemp == prevTargetTemp )
 		{
 			Fan_OFF()
 		}
@@ -330,10 +360,14 @@ void Run_Task(void)
 	// read pid values from buffer
 	if( rxBuffer.cmd == CMD_PCR_RUN )
 	{
-		memcpy(&kp, &(rxBuffer.pid_p1), sizeof(float));
-		memcpy(&ki, &(rxBuffer.pid_i1), sizeof(float));
-		memcpy(&kd, &(rxBuffer.pid_d1), sizeof(float));
-		memcpy(&integralMax, &(rxBuffer.integralMax_1), sizeof(float));
+		memcpy(&kp, &(rxBuffer.pid_p1), 4);
+		memcpy(&ki, &(rxBuffer.pid_i1), 4);
+		memcpy(&kd, &(rxBuffer.pid_d1), 4);
+		memcpy(&integralMax, &(rxBuffer.integralMax_1), 4);
+		/* test for p value(current p value is 80) 
+		if( rxBuffer.pid_p3 != 160 && rxBuffer.pid_p4 != 66 ){
+			LED_B = !LED_B;
+		}*/
 	}
 
 	currentErr = currentTargetTemp - currentTemp;
@@ -391,5 +425,19 @@ void TxBuffer_Setting(void)
 	txBuffer.request_data = request_data;
 
 	// Copy the txBuffer struct to rawBuffer
-	memcpy(&ToSendDataBuffer, &txBuffer, sizeof(TxBuffer));
+	//memcpy(&ToSendDataBuffer, &txBuffer, sizeof(TxBuffer));
+
+	// 150801 yj
+	// buffer copy directly
+	ToSendDataBuffer[0] = txBuffer.state;
+	ToSendDataBuffer[1] = txBuffer.chamber_h;
+	ToSendDataBuffer[2] = txBuffer.chamber_l;
+	ToSendDataBuffer[3] = txBuffer.chamber_temp_1;
+	ToSendDataBuffer[4] = txBuffer.chamber_temp_2;
+	ToSendDataBuffer[5] = txBuffer.chamber_temp_3;
+	ToSendDataBuffer[6] = txBuffer.chamber_temp_4;
+	ToSendDataBuffer[7] = txBuffer.photodiode_h;
+	ToSendDataBuffer[8] = txBuffer.photodiode_l;
+	ToSendDataBuffer[9] = txBuffer.currentError;
+	ToSendDataBuffer[10] = txBuffer.request_data;
 }

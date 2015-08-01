@@ -101,7 +101,7 @@ typedef enum _ERROR
 } ERROR;
 
 // Temperature Sampling Count
-#define SAMPLING_COUNT			20
+#define SAMPLING_COUNT			10
 
 #define MAX_PID_COUNT			10
 

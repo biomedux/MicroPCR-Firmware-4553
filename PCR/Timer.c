@@ -75,7 +75,7 @@ void timer1_isr(void)
 			T10MS_Counter++;
 		}
 
-		if( T50MS_Counter >= 5 )
+		if( T50MS_Counter >= 15 )
 		{
 			T50MS_Flag = TRUE;
 			T50MS_Counter = 0;
