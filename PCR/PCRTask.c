@@ -10,6 +10,7 @@
 #include "./DEFINE/UserDefs.h"
 #include "./DEFINE/GlobalTypeVars.h"
 #include "./PCR/Temp_Table.h"
+#include "./USB/usb.h"
 #include <math.h>
 
 // in UsbTask.c
@@ -240,7 +241,7 @@ void Command_Setting(void)
 				lastError = 0;
 				prevTargetTemp = currentTargetTemp = 25;
 
-			//	Run_Task();
+				Run_Task();
 			}
 			else if( currentState == STATE_RUNNING )
 			{
@@ -385,5 +386,9 @@ void TxBuffer_Setting(void)
 	txBuffer.request_data = request_data;
 
 	// Copy the txBuffer struct to rawBuffer
+	// and clear previous buffer
+	USBMaskInterrupts();
+	memset(&rxBuffer, 0, sizeof(RxBuffer));
 	memcpy(&ToSendDataBuffer, &txBuffer, sizeof(TxBuffer));
+	USBUnmaskInterrupts();
 }

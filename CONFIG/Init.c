@@ -227,7 +227,6 @@ void MainLooper(void)
 
 		// copy the raw buffer to structed buffer.
 		// and clear previous raw buffer(important)
-
 		USBMaskInterrupts();
 		memcpy(&rxBuffer, ReceivedDataBuffer, sizeof(RxBuffer));
 		memset(ReceivedDataBuffer, 0, RX_BUFSIZE);

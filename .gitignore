@@ -28,5 +28,8 @@
 *.x86_64
 *.hex
 
+# err file
+*.err
+
 # Debug files
 *.dSYM/
