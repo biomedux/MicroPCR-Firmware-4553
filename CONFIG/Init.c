@@ -224,6 +224,14 @@ void MainLooper(void)
 	{
 		T50MS_Flag = FALSE;
 		USB_Task();		//	If connected to host, commnuicate by host. rx, tx.
+
+		// copy the raw buffer to structed buffer.
+		// and clear previous raw buffer(important)
+
+		USBMaskInterrupts();
+		memcpy(&rxBuffer, ReceivedDataBuffer, sizeof(RxBuffer));
+		memset(ReceivedDataBuffer, 0, RX_BUFSIZE);
+		USBUnmaskInterrupts();
 	}
 	
 	if(T10MS_Flag)

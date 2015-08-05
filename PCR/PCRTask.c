@@ -41,45 +41,14 @@ double lastError = 0;
 float kp = 0, ki = 0, kd = 0;
 float integralMax = 2600.0;
 
+BYTE fanFlag = 0;
+
 /**********************************
 * Function : void PCR_Task(void)
 * This function is overall routine for microPCR
 **********************************/
 void PCR_Task(void)
 {
-	// 150801 yj 
-	// buffer copy directly not using memcpy function.
-	rxBuffer.cmd = ReceivedDataBuffer[0];
-	rxBuffer.currentTargetTemp = ReceivedDataBuffer[1];
-	rxBuffer.startTemp = ReceivedDataBuffer[2];
-	rxBuffer.targetTemp = ReceivedDataBuffer[3];
-	rxBuffer.pid_p1 = ReceivedDataBuffer[4];
-	rxBuffer.pid_p2 = ReceivedDataBuffer[5];
-	rxBuffer.pid_p3 = ReceivedDataBuffer[6];
-	rxBuffer.pid_p4 = ReceivedDataBuffer[7];
-	rxBuffer.pid_i1 = ReceivedDataBuffer[8];
-	rxBuffer.pid_i2 = ReceivedDataBuffer[9];
-	rxBuffer.pid_i3 = ReceivedDataBuffer[10];
-	rxBuffer.pid_i4 = ReceivedDataBuffer[11];	
-	rxBuffer.pid_d1 = ReceivedDataBuffer[12];
-	rxBuffer.pid_d2 = ReceivedDataBuffer[13];
-	rxBuffer.pid_d3 = ReceivedDataBuffer[14];
-	rxBuffer.pid_d4 = ReceivedDataBuffer[15];
-	rxBuffer.integralMax_1 = ReceivedDataBuffer[16];
-	rxBuffer.integralMax_2 = ReceivedDataBuffer[17];
-	rxBuffer.integralMax_3 = ReceivedDataBuffer[18];
-	rxBuffer.integralMax_4 = ReceivedDataBuffer[19];
-	rxBuffer.ledControl = ReceivedDataBuffer[20];
-	rxBuffer.led_wg = ReceivedDataBuffer[21];
-	rxBuffer.led_r = ReceivedDataBuffer[22];
-	rxBuffer.led_g = ReceivedDataBuffer[23];
-	rxBuffer.led_b = ReceivedDataBuffer[24];
-
-	// copy the raw buffer to structed buffer.
-	// and clear previous raw buffer(important)
-	//memcpy(&rxBuffer, ReceivedDataBuffer, sizeof(RxBuffer));
-	memset(ReceivedDataBuffer, 0, RX_BUFSIZE);
-
 	// Check the cmd buffer, performing the specific task.
 	Command_Setting();
 
@@ -90,7 +59,7 @@ void PCR_Task(void)
 		//LED_WG = rxBuffer.led_wg;
 		//LED_R = rxBuffer.led_r;
 		//LED_G = rxBuffer.led_g;
-		// LED_B = rxBuffer.led_b;
+		LED_B = rxBuffer.led_b;
 	}
 
 	// Setting the tx buffer by structed buffer.
@@ -334,10 +303,12 @@ void Run_Task(void)
 	
 	if(	prevTargetTemp > currentTargetTemp )
 	{
-		if( currentTemp-currentTargetTemp <= FAN_STOP_TEMPDIF &&
-			currentTargetTemp == prevTargetTemp )
+		if( ( currentTemp-currentTargetTemp <= FAN_STOP_TEMPDIF &&
+			  currentTargetTemp == prevTargetTemp ) ||
+			  fanFlag )
 		{
-			Fan_OFF()
+			Fan_OFF();
+			fanFlag = 1;
 		}
 		else
 		{
@@ -346,15 +317,8 @@ void Run_Task(void)
 	}
 	else
 	{
-		if( (currentTargetTemp-currentTemp) <= -1.0 && 
-			currentTargetTemp != prevTargetTemp )
-		{
-			Fan_ON();
-		}
-		else
-		{
-			Fan_OFF();
-		}
+		fanFlag = 0;
+		Fan_OFF();
 	}
 	
 	// read pid values from buffer
@@ -364,10 +328,6 @@ void Run_Task(void)
 		memcpy(&ki, &(rxBuffer.pid_i1), 4);
 		memcpy(&kd, &(rxBuffer.pid_d1), 4);
 		memcpy(&integralMax, &(rxBuffer.integralMax_1), 4);
-		/* test for p value(current p value is 80) 
-		if( rxBuffer.pid_p3 != 160 && rxBuffer.pid_p4 != 66 ){
-			LED_B = !LED_B;
-		}*/
 	}
 
 	currentErr = currentTargetTemp - currentTemp;
@@ -425,19 +385,5 @@ void TxBuffer_Setting(void)
 	txBuffer.request_data = request_data;
 
 	// Copy the txBuffer struct to rawBuffer
-	//memcpy(&ToSendDataBuffer, &txBuffer, sizeof(TxBuffer));
-
-	// 150801 yj
-	// buffer copy directly
-	ToSendDataBuffer[0] = txBuffer.state;
-	ToSendDataBuffer[1] = txBuffer.chamber_h;
-	ToSendDataBuffer[2] = txBuffer.chamber_l;
-	ToSendDataBuffer[3] = txBuffer.chamber_temp_1;
-	ToSendDataBuffer[4] = txBuffer.chamber_temp_2;
-	ToSendDataBuffer[5] = txBuffer.chamber_temp_3;
-	ToSendDataBuffer[6] = txBuffer.chamber_temp_4;
-	ToSendDataBuffer[7] = txBuffer.photodiode_h;
-	ToSendDataBuffer[8] = txBuffer.photodiode_l;
-	ToSendDataBuffer[9] = txBuffer.currentError;
-	ToSendDataBuffer[10] = txBuffer.request_data;
+	memcpy(&ToSendDataBuffer, &txBuffer, sizeof(TxBuffer));
 }
