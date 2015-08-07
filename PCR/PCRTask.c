@@ -305,7 +305,7 @@ void Run_Task(void)
 	if(	prevTargetTemp > currentTargetTemp )
 	{
 		if( ( currentTemp-currentTargetTemp <= FAN_STOP_TEMPDIF &&
-			  currentTargetTemp == prevTargetTemp ) ||
+			  currentTargetTemp != prevTargetTemp ) ||
 			  fanFlag )
 		{
 			Fan_OFF();
