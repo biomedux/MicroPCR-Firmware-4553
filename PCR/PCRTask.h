@@ -17,6 +17,7 @@ double quickSort(float *d, int n);
 void Sensor_Task(void);
 void Command_Setting(void);
 void Run_Task(void);
+void PID_Control(void);
 void Stop_Task(void);
 void TxBuffer_Setting(void);
 

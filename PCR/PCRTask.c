@@ -284,11 +284,6 @@ void Command_Setting(void)
 
 void Run_Task(void)
 {
-	double currentErr = 0, proportional = 0, integral = 0;
-	double derivative = 0;
-	int pwmValue = 0xffff;
-	BYTE tempBuf[4] = { 0, };
-
 	if( rxBuffer.cmd == CMD_PCR_RUN && 
 		currentTargetTemp != rxBuffer.currentTargetTemp )
 	{
@@ -321,7 +316,16 @@ void Run_Task(void)
 		fanFlag = 0;
 		Fan_OFF();
 	}
-	
+
+	PID_Control();
+}
+
+void PID_Control(void)
+{
+	double currentErr = 0, proportional = 0, integral = 0;
+	double derivative = 0;
+	int pwmValue = 0xffff;
+
 	// read pid values from buffer
 	if( rxBuffer.cmd == CMD_PCR_RUN )
 	{
@@ -352,6 +356,17 @@ void Run_Task(void)
 
 	lastError = currentErr;
 	lastIntegral = integral;
+
+	//PID Control
+	if(	prevTargetTemp > currentTargetTemp )
+	{
+		if( fanFlag == 0  || (fanFlag ==1 && currentTargetTemp - currentTemp >= 2.0))
+		{
+			pwmValue = 0x0;
+			lastIntegral = 0;
+			lastError = 0;
+		}
+	} 
 
 	CCPR1L = (BYTE)(pwmValue>>2);
 	CCP1CON = ((CCP1CON&0xCF) | (BYTE)((pwmValue&0x03)<<4));
