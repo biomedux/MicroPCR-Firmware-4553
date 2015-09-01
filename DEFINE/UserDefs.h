@@ -113,6 +113,7 @@ typedef enum _ERROR
 #define K						273.15
 
 #define FAN_STOP_TEMPDIF		-4.0
+#define FAN_STOP_ARRIVAL		-2.0
 #define INTGRALMAX				2600.0
 
 #endif

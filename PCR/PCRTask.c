@@ -297,18 +297,24 @@ void Run_Task(void)
 		}
 	}
 	
-	if(	prevTargetTemp > currentTargetTemp )
+	//in Run_Task, 150901 kimjd
+	if(prevTargetTemp>currentTargetTemp ) 
 	{
-		if( ( currentTemp-currentTargetTemp <= FAN_STOP_TEMPDIF &&
-			  currentTargetTemp != prevTargetTemp ) ||
-			  fanFlag )
-		{
-			Fan_OFF();
-			fanFlag = 1;
-		}
-		else
+		if( currentTemp>prevTargetTemp-1 ) 
 		{
 			Fan_ON();
+			fanFlag = 1;
+		}
+
+		if( (fanFlag == 1) && (currentTemp-currentTargetTemp<= FAN_STOP_TEMPDIF) ) 
+		{
+			Fan_OFF();
+			fanFlag = 2;
+		}
+		
+		if( (fanFlag == 2) && (currentTemp-currentTargetTemp<= FAN_STOP_ARRIVAL) )
+		{
+			fanFlag = 0;
 		}
 	}
 	else
@@ -316,6 +322,7 @@ void Run_Task(void)
 		fanFlag = 0;
 		Fan_OFF();
 	}
+
 
 	PID_Control();
 }
@@ -357,15 +364,15 @@ void PID_Control(void)
 	lastError = currentErr;
 	lastIntegral = integral;
 
-	//PID Control
+	//PID Control, 150901 kimjd
 	if(	prevTargetTemp > currentTargetTemp )
 	{
-		if( fanFlag == 0  || (fanFlag ==1 && currentTargetTemp - currentTemp >= 2.0))
+		if ( fanFlag == 2 ) 
 		{
 			pwmValue = 0x0;
 			lastIntegral = 0;
 			lastError = 0;
-		}
+     	}
 	} 
 
 	CCPR1L = (BYTE)(pwmValue>>2);
