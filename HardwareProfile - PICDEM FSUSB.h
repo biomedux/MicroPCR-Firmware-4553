@@ -105,7 +105,7 @@
     /** LED ************************************************************/
 	//#define LED_WG		LATDbits.LATD0    
 	//#define LED_R		LATDbits.LATD1
-	#define LED_B		LATDbits.LATD2
+	#define LED_B		LATDbits.LATD3
 	//#define LED_G		LATDbits.LATD3
 	
 	//#define LED_WG_ON()         	LED_WG = 0; 
@@ -117,7 +117,7 @@
 	#define LED_B_ON()         		LED_B = 0; 
     #define LED_B_OFF()        		LED_B = 1;
 	
-	#define InitLEDs()	{TRISDbits.TRISD2=0;LED_B_OFF();}
+	#define InitLEDs()	{TRISDbits.TRISD3=0;LED_B_OFF();}
 
 
     /** SWITCH *********************************************************/
