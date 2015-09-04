@@ -20,9 +20,9 @@ extern BOOL T30MS_Flag;
 
 /** For pid control delay **************************/
 // 150904 YJ
-extern UINT T2S_Counter;
-extern BOOL T2S_Flag;
-extern BYTE targetArrival;
+extern UINT freeRunningCounter;
+extern BOOL freeRunning;
+extern BYTE fallingTargetArrival;
 
 /** Protect buffer *********************************/
 extern RxBuffer rxBuffer;

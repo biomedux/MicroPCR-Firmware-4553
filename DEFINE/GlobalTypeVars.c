@@ -15,9 +15,9 @@ BOOL T30MS_Flag = FALSE;
 
 /** For pid control delay **************************/
 // 150904 YJ
-UINT T2S_Counter = 0x00;
-BOOL T2S_Flag = FALSE;
-BYTE targetArrival = 0;
+UINT freeRunningCounter = 0x00;
+BOOL freeRunning = FALSE;
+BYTE fallingTargetArrival = 0;
 
 RxBuffer rxBuffer;
 TxBuffer txBuffer;

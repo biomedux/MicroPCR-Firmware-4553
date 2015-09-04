@@ -78,14 +78,14 @@ void timer1_isr(void)
 
 		// 150904 YJ
 		// counting 2sec
-		if( T2S_Flag )
+		if( freeRunning )
 		{
-			T2S_Counter++;
-			if( T2S_Counter >= 2000 )
+			freeRunningCounter++;
+			if( freeRunningCounter >= 2000 )
 			{
-				T2S_Flag = FALSE;
-				T2S_Counter = 0;
-				targetArrival = 1;
+				freeRunning = FALSE;
+				freeRunningCounter = 0;
+				fallingTargetArrival = 1;
 			}	
 		}
 	}
