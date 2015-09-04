@@ -220,9 +220,9 @@ void InitializeUser(void)
  ***************************************************/
 void MainLooper(void)
 {
-	if(T50MS_Flag)		//	At 0.1 ticks. but now 0.2 ms? maybe
+	if(T30MS_Flag)		//	At 0.1 ticks. but now 0.2 ms? maybe
 	{
-		T50MS_Flag = FALSE;
+		T30MS_Flag = FALSE;
 		USB_Task();		//	If connected to host, commnuicate by host. rx, tx.
 
 		// copy the raw buffer to structed buffer.
@@ -233,9 +233,9 @@ void MainLooper(void)
 		USBUnmaskInterrupts();
 	}
 	
-	if(T10MS_Flag)
+	if(T2MS_Flag)
 	{
-		T10MS_Flag = FALSE;
+		T2MS_Flag = FALSE;
 		PCR_Task();
 	}
 }

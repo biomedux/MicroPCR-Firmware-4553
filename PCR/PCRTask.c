@@ -315,10 +315,12 @@ void Run_Task(void)
 		if( (fanFlag == 2) && (currentTemp-currentTargetTemp<= FAN_STOP_ARRIVAL) )
 		{
 			fanFlag = 0;
+			T2S_Flag = TRUE;
 		}
 	}
 	else
 	{
+		targetArrival = 0;
 		fanFlag = 0;
 		Fan_OFF();
 	}
@@ -367,7 +369,7 @@ void PID_Control(void)
 	//PID Control, 150901 kimjd
 	if(	prevTargetTemp > currentTargetTemp )
 	{
-		if ( fanFlag == 2 ) 
+		if ( fanFlag == 2 || T2S_Flag ) 
 		{
 			pwmValue = 0x0;
 			lastIntegral = 0;
@@ -406,6 +408,10 @@ void TxBuffer_Setting(void)
 
 	// For request
 	txBuffer.request_data = request_data;
+
+	// For setting the arrival
+	// 150904 YJ
+	txBuffer.targetArrival = targetArrival;
 
 	// Copy the txBuffer struct to rawBuffer
 	// and clear previous buffer

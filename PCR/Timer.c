@@ -12,11 +12,6 @@
 #include "./DEFINE/UserDefs.h"
 #include "./PCR/Timer.h"
 
-/** Variables **************************************/
-// Counter
-BYTE Heater_Count = 0x0000;
-BYTE ChamberFan_Count = 0x0000;
-BYTE SystemFan_Count = 0x0000;
 
 /***************************************************
  * Function:        void TIMR1_init(void)
@@ -64,21 +59,34 @@ void timer1_isr(void)
 		TMR1H = 0xFA; 	//	set duration high first
 		TMR1L = 0x23;  	//	set duration low
 
-		if( T10MS_Counter >= 2 )
+		if( T2MS_Counter >= 2 )
 		{
-			T10MS_Flag = TRUE;
-			T10MS_Counter = 0;	
-			T50MS_Counter++;
+			T2MS_Flag = TRUE;
+			T2MS_Counter = 0;	
+			T30MS_Counter++;
 		}
 		else
 		{
-			T10MS_Counter++;
+			T2MS_Counter++;
 		}
 
-		if( T50MS_Counter >= 15 )
+		if( T30MS_Counter >= 15 )
 		{
-			T50MS_Flag = TRUE;
-			T50MS_Counter = 0;
+			T30MS_Flag = TRUE;
+			T30MS_Counter = 0;
+		}
+
+		// 150904 YJ
+		// counting 2sec
+		if( T2S_Flag )
+		{
+			T2S_Counter++;
+			if( T2S_Counter >= 2000 )
+			{
+				T2S_Flag = FALSE;
+				T2S_Counter = 0;
+				targetArrival = 1;
+			}	
 		}
 	}
 }

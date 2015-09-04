@@ -8,10 +8,16 @@
 #include "./DEFINE/GlobalTypeVars.h"
 
 /** Define Extern Variables ********************/
-UINT T10MS_Counter = 0x00;
-BOOL T10MS_Flag = FALSE;
-UINT T50MS_Counter = 0x00;
-BOOL T50MS_Flag = FALSE;
+UINT T2MS_Counter = 0x00;
+BOOL T2MS_Flag = FALSE;
+UINT T30MS_Counter = 0x00;
+BOOL T30MS_Flag = FALSE;
+
+/** For pid control delay **************************/
+// 150904 YJ
+UINT T2S_Counter = 0x00;
+BOOL T2S_Flag = FALSE;
+BYTE targetArrival = 0;
 
 RxBuffer rxBuffer;
 TxBuffer txBuffer;
