@@ -358,8 +358,10 @@ void PID_Control(void)
 	else if( pwmValue < 0 )
 		pwmValue = 0;
 
-	if(prevTargetTemp == 25 )
-		pwmValue = 512;
+	if(prevTargetTemp == 25 ){
+		if( pwmValue > 512 )
+			pwmValue = 512;
+	}
 
 	lastError = currentErr;
 	lastIntegral = integral;
