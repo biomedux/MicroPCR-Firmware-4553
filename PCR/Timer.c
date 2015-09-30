@@ -88,6 +88,20 @@ void timer1_isr(void)
 				fallingTargetArrival = 1;
 			}	
 		}
+
+		// 150930 YJ For PWM Power Test
+		powerCounter++;
+		if( powerCounter <= PWM_POWER_DUTY ){
+			Set_PWM_plus_Out();
+			Set_PWM_minus_Out();
+		}
+		else{
+			Set_PWM_plus_In();
+			Set_PWM_minus_In();
+		}
+
+		if( powerCounter >= PWM_POWER_PERIOD )
+			powerCounter = 0;
 	}
 }
 

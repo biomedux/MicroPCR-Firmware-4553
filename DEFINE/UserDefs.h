@@ -14,6 +14,11 @@
 #define RX_BUFSIZE		64		// Buffer Size
 #define TX_BUFSIZE		64
 
+
+// 150930 For PWM Power Test
+#define PWM_POWER_PERIOD	4
+#define PWM_POWER_DUTY		1
+
 //#define EMULATOR 
 
 typedef struct _RXBUFFER

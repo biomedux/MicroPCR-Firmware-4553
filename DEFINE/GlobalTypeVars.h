@@ -24,6 +24,9 @@ extern UINT freeRunningCounter;
 extern BOOL freeRunning;
 extern BYTE fallingTargetArrival;
 
+// 150930 YJ For PWM Power Test
+extern UINT powerCounter;
+
 /** Protect buffer *********************************/
 extern RxBuffer rxBuffer;
 extern TxBuffer txBuffer;

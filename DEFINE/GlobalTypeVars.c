@@ -19,5 +19,8 @@ UINT freeRunningCounter = 0x00;
 BOOL freeRunning = FALSE;
 BYTE fallingTargetArrival = 0;
 
+// 150930 YJ
+UINT powerCounter = 0;
+
 RxBuffer rxBuffer;
 TxBuffer txBuffer;
