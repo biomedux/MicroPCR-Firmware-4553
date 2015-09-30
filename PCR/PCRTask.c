@@ -359,8 +359,8 @@ void PID_Control(void)
 		pwmValue = 0;
 
 	if(prevTargetTemp == 25 ){
-		if( pwmValue > 512 )
-			pwmValue = 512;
+		if( pwmValue > PWM_FIRST_MAX )
+			pwmValue = PWM_FIRST_MAX;
 	}
 
 	lastError = currentErr;

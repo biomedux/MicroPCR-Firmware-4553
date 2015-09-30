@@ -17,7 +17,8 @@
 
 // 150930 For PWM Power Test
 #define PWM_POWER_PERIOD	4
-#define PWM_POWER_DUTY		1
+#define PWM_POWER_DUTY		2
+#define PWM_FIRST_MAX		256
 
 //#define EMULATOR 
 
