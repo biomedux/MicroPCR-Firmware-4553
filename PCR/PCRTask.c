@@ -214,7 +214,8 @@ void Sensor_Task(void)
 	memcpy(temp_buffer2, temp_buffer, 5*sizeof(float));
 
 	currentTemp = (float)quickSort(temp_buffer2, 5);
-	currentTemp *= compensation;
+	if( rxBuffer.compensation > 0 )
+		currentTemp *= compensation;
 }
 
 /**********************************
