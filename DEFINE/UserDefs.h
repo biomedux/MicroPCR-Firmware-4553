@@ -17,8 +17,8 @@
 
 // 150930 For PWM Power Test
 #define PWM_POWER_PERIOD	4
-#define PWM_POWER_DUTY		2
-#define PWM_FIRST_MAX		256
+#define PWM_POWER_DUTY		1
+#define PWM_FIRST_MAX		1024
 
 //#define EMULATOR 
 
@@ -57,7 +57,9 @@ typedef struct _RXBUFFER
 	BYTE led_g;
 	BYTE led_b;
 
-	BYTE reserved_for_64byte[39];
+	BYTE compensation;
+
+	BYTE reserved_for_64byte[38];
 } RxBuffer;
 
 typedef struct _TXBUFFER
@@ -106,6 +108,7 @@ typedef enum _ERROR
 {
 	ERROR_NO = 0x00,
 	ERROR_ASSERT,
+	ERROR_OVERHEAT,
 } ERROR;
 
 // Temperature Sampling Count
@@ -113,15 +116,13 @@ typedef enum _ERROR
 
 #define MAX_PID_COUNT			10
 
-#define	A_VAL					8.314242955712037e-004
-#define B_VAL					2.620794578770541e-004
-#define C_VAL					1.368534674434736e-007
-
-#define Rref					1800.0
-#define K						273.15
-
 #define FAN_STOP_TEMPDIF		-2.0
 #define INTGRALMAX				2600.0
+
+#define OVERHEATING_TEMP		105.0
+
+#define COMPENSATION_DEFAULT	1.000
+#define COMPENSATION_UNIT		0.001
 
 #endif
 

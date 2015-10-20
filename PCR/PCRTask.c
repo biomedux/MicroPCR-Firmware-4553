@@ -180,9 +180,12 @@ ROM BYTE *pTemp_Chamber = (ROM BYTE *)&NTC_CHAMBER_TABLE;
 void Sensor_Task(void)
 {
 	double r, InRs, tmp, adc;
+	float compensation = COMPENSATION_DEFAULT;
 	WORD chamber = ReadTemperature(ADC_CHAMBER);
 	WORD photodiode = ReadPhotodiode();
 	WORD index = 0;
+
+	compensation -= (rxBuffer.compensation * COMPENSATION_UNIT);
 
 	// save the adc value by high low type
 	chamber_h = (BYTE)(chamber>>8);
@@ -193,6 +196,10 @@ void Sensor_Task(void)
 	// temperature calculation
 	index = (WORD)((chamber/4) * 2.);
 	currentTemp = (float)(pTemp_Chamber[index]) + (float)(pTemp_Chamber[index+1] * 0.1);
+
+	// Checking overheating
+	if( currentTemp >= OVERHEATING_TEMP )
+		currentError = ERROR_OVERHEAT;
 	
 	// for median filtering
 	temp_buffer[0] = temp_buffer[1];
@@ -204,6 +211,7 @@ void Sensor_Task(void)
 	memcpy(temp_buffer2, temp_buffer, 5*sizeof(float));
 
 	currentTemp = (float)quickSort(temp_buffer2, 5);
+	currentTemp *= compensation;
 }
 
 /**********************************
@@ -256,8 +264,6 @@ void Command_Setting(void)
 				currentState = STATE_READY;
 				Stop_Task();
 			}
-			else
-				currentError = ERROR_ASSERT;
 			break;
 		case CMD_FAN_ON:
 			if( currentState == STATE_READY )
