@@ -196,6 +196,8 @@ void Sensor_Task(void)
 	// temperature calculation
 	index = (WORD)((chamber/4) * 2.);
 	currentTemp = (float)(pTemp_Chamber[index]) + (float)(pTemp_Chamber[index+1] * 0.1);
+	if( rxBuffer.compensation > 0 )
+		currentTemp *= compensation;
 
 	// Checking overheating
 	if( currentTemp >= OVERHEATING_TEMP ){
@@ -214,8 +216,6 @@ void Sensor_Task(void)
 	memcpy(temp_buffer2, temp_buffer, 5*sizeof(float));
 
 	currentTemp = (float)quickSort(temp_buffer2, 5);
-	if( rxBuffer.compensation > 0 )
-		currentTemp *= compensation;
 }
 
 /**********************************
