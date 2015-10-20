@@ -198,8 +198,11 @@ void Sensor_Task(void)
 	currentTemp = (float)(pTemp_Chamber[index]) + (float)(pTemp_Chamber[index+1] * 0.1);
 
 	// Checking overheating
-	if( currentTemp >= OVERHEATING_TEMP )
+	if( currentTemp >= OVERHEATING_TEMP ){
+		currentState = STATE_READY;
+		Stop_Task();
 		currentError = ERROR_OVERHEAT;
+	}
 	
 	// for median filtering
 	temp_buffer[0] = temp_buffer[1];
