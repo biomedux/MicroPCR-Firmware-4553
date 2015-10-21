@@ -42,6 +42,8 @@ double lastError = 0;
 float kp = 0, ki = 0, kd = 0;
 float integralMax = 2600.0;
 
+float compensation = 0;
+
 BYTE fanFlag = 0;
 
 /**********************************
@@ -180,12 +182,9 @@ ROM BYTE *pTemp_Chamber = (ROM BYTE *)&NTC_CHAMBER_TABLE;
 void Sensor_Task(void)
 {
 	double r, InRs, tmp, adc;
-	float compensation = COMPENSATION_DEFAULT;
 	WORD chamber = ReadTemperature(ADC_CHAMBER);
 	WORD photodiode = ReadPhotodiode();
 	WORD index = 0;
-
-	compensation -= (rxBuffer.compensation * COMPENSATION_UNIT);
 
 	// save the adc value by high low type
 	chamber_h = (BYTE)(chamber>>8);
@@ -196,8 +195,9 @@ void Sensor_Task(void)
 	// temperature calculation
 	index = (WORD)((chamber/4) * 2.);
 	currentTemp = (float)(pTemp_Chamber[index]) + (float)(pTemp_Chamber[index+1] * 0.1);
-	if( rxBuffer.compensation > 0 )
-		currentTemp *= compensation;
+	if( compensation > 0 ){
+		currentTemp = currentTemp * compensation;
+	}
 
 	// Checking overheating
 	if( currentTemp >= OVERHEATING_TEMP ){
@@ -253,6 +253,8 @@ void Command_Setting(void)
 				lastError = 0;
 				prevTargetTemp = currentTargetTemp = 25;
 
+				compensation = COMPENSATION_DEFAULT - (rxBuffer.compensation * COMPENSATION_UNIT);
+
 				Run_Task();
 			}
 			else if( currentState == STATE_RUNNING )
@@ -275,18 +277,12 @@ void Command_Setting(void)
 				currentState = STATE_PAN_RUNNING;
 				Fan_ON();
 			}
-			else if( currentState != STATE_PAN_RUNNING )
-				currentError = ERROR_ASSERT;
 			break;
 		case CMD_FAN_OFF:
 			if( currentState == STATE_PAN_RUNNING )
 			{
 				currentState = STATE_READY;
 				Fan_OFF();
-			}
-			else
-			{
-				currentError = ERROR_ASSERT;
 			}
 			break;
 	}
