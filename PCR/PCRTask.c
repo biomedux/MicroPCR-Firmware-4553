@@ -272,18 +272,10 @@ void Command_Setting(void)
 			}
 			break;
 		case CMD_FAN_ON:
-			if( currentState == STATE_READY )
-			{
-				currentState = STATE_PAN_RUNNING;
 				Fan_ON();
-			}
 			break;
 		case CMD_FAN_OFF:
-			if( currentState == STATE_PAN_RUNNING )
-			{
-				currentState = STATE_READY;
 				Fan_OFF();
-			}
 			break;
 	}
 }

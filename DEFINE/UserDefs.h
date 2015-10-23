@@ -91,7 +91,6 @@ typedef enum _STATE				//	Device State.
 {								//  Used in PCR_Task.c
 	STATE_READY = 0x00,
 	STATE_RUNNING,
-	STATE_PAN_RUNNING,
 } STATE;
 
 typedef enum _COMMAND			//	Rx_Buffer[0] = Set Command
