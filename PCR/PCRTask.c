@@ -45,6 +45,7 @@ float integralMax = 2600.0;
 float compensation = 0;
 
 BYTE fanFlag = 0;
+BYTE overheatStage = 0;
 
 /**********************************
 * Function : void PCR_Task(void)
@@ -195,15 +196,34 @@ void Sensor_Task(void)
 	// temperature calculation
 	index = (WORD)((chamber/4) * 2.);
 	currentTemp = (float)(pTemp_Chamber[index]) + (float)(pTemp_Chamber[index+1] * 0.1);
+
 	if( compensation > 0 ){
 		currentTemp = currentTemp * compensation;
 	}
 
 	// Checking overheating
-	if( currentTemp >= OVERHEATING_TEMP ){
+	if( currentTemp >= OVERHEATING_TEMP && (overheatStage == 2) ){
 		currentState = STATE_READY;
 		Stop_Task();
 		currentError = ERROR_OVERHEAT;
+	}
+
+	// prevent the overheating by insertion of chip.
+	if( currentTemp < 5 )
+		overheatStage = 0;
+
+	if( overheatStage == 0 ){
+		if( currentTemp > 100 ){
+			overheatStage = 1;
+		}
+		else if( currentTemp < 60 ){
+			overheatStage = 2;
+		}
+	}
+	else if( overheatStage == 1 ){
+		if( currentTemp < 60 ){
+			overheatStage = 2;
+		}
 	}
 	
 	// for median filtering
@@ -265,8 +285,7 @@ void Command_Setting(void)
 				currentError = ERROR_ASSERT;
 			break;
 		case CMD_PCR_STOP:
-			if( currentState == STATE_RUNNING )
-			{
+			if( currentState == STATE_RUNNING ){
 				currentState = STATE_READY;
 				Stop_Task();
 			}
