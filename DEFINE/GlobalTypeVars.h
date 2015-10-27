@@ -31,5 +31,8 @@ extern UINT powerCounter;
 extern RxBuffer rxBuffer;
 extern TxBuffer txBuffer;
 
+extern BYTE prevState;
+extern BYTE currentState;
+
 #endif
 

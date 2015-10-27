@@ -17,9 +17,6 @@
 extern unsigned char ReceivedDataBuffer[RX_BUFSIZE];
 extern unsigned char ToSendDataBuffer[TX_BUFSIZE];
 
-BYTE prevState = STATE_READY;
-BYTE currentState = STATE_READY;
-
 BYTE chamber_h = 0x00;
 BYTE chamber_l = 0x00;
 
@@ -45,7 +42,6 @@ float integralMax = 2600.0;
 float compensation = 0;
 
 BYTE fanFlag = 0;
-BYTE overheatStage = 0;
 
 /**********************************
 * Function : void PCR_Task(void)
@@ -202,28 +198,10 @@ void Sensor_Task(void)
 	}
 
 	// Checking overheating
-	if( currentTemp >= OVERHEATING_TEMP && (overheatStage == 2) ){
+	if( currentTemp >= OVERHEATING_TEMP ){
 		currentState = STATE_READY;
 		Stop_Task();
 		currentError = ERROR_OVERHEAT;
-	}
-
-	// prevent the overheating by insertion of chip.
-	if( currentTemp < 5 )
-		overheatStage = 0;
-
-	if( overheatStage == 0 ){
-		if( currentTemp > 100 ){
-			overheatStage = 1;
-		}
-		else if( currentTemp < 60 ){
-			overheatStage = 2;
-		}
-	}
-	else if( overheatStage == 1 ){
-		if( currentTemp < 60 ){
-			overheatStage = 2;
-		}
 	}
 	
 	// for median filtering
@@ -267,7 +245,6 @@ void Command_Setting(void)
 		case CMD_PCR_RUN:
 			if( currentState == STATE_READY )
 			{
-				Init_PWM_MODE();
 				currentState = STATE_RUNNING;
 				lastIntegral = 0;
 				lastError = 0;
@@ -285,10 +262,7 @@ void Command_Setting(void)
 				currentError = ERROR_ASSERT;
 			break;
 		case CMD_PCR_STOP:
-			if( currentState == STATE_RUNNING ){
-				currentState = STATE_READY;
-				Stop_Task();
-			}
+			Stop_Task();
 			break;
 		case CMD_FAN_ON:
 				Fan_ON();
@@ -336,8 +310,6 @@ void Run_Task(void)
 		fanFlag = 0;
 		Fan_OFF();
 	}
-
-
 	PID_Control();
 }
 
@@ -345,7 +317,8 @@ void PID_Control(void)
 {
 	double currentErr = 0, proportional = 0, integral = 0;
 	double derivative = 0;
-	int pwmValue = 0xffff;
+	double pwmValue = 0;
+	int pwmValue2 = 0;
 
 	// read pid values from buffer
 	if( rxBuffer.cmd == CMD_PCR_RUN )
@@ -394,13 +367,17 @@ void PID_Control(void)
 		}
 	} 
 
-	CCPR1L = (BYTE)(pwmValue>>2);
-	CCP1CON = ((CCP1CON&0xCF) | (BYTE)((pwmValue&0x03)<<4));
+	pwmValue2 = (int)pwmValue;
+
+	CCPR1L = (BYTE)(pwmValue2>>2);
+	CCP1CON = ((CCP1CON&0xCF) | (BYTE)((pwmValue2&0x03)<<4));
 }
 
 void Stop_Task(void)
 {
-	Stop_PWM_MODE();
+	currentState = STATE_READY;
+	CCPR1L = (BYTE)(0x00>>2);
+	CCP1CON = ((CCP1CON&0xCF) | (BYTE)((0x00&0x03)<<4));
 	Fan_OFF();
 }
 

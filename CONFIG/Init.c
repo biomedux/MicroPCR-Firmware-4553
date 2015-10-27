@@ -188,7 +188,7 @@ void InitializeDevice(void)
 	InitFans();
 
 	// Initialize pwm
-	Stop_PWM_MODE();
+	Init_PWM_MODE();
 
 	// Initilaize the user buffer
 	InitializeUser();

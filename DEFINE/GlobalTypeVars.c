@@ -24,3 +24,6 @@ UINT powerCounter = 0;
 
 RxBuffer rxBuffer;
 TxBuffer txBuffer;
+
+BYTE prevState = STATE_READY;
+BYTE currentState = STATE_READY;

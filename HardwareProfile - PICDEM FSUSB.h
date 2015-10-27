@@ -256,7 +256,7 @@
 
 	#define Stop_PWM_MODE() {T2CONbits.TMR2ON = 0;\
 							 Set_PWM_plus_In();\
-						 	 Set_PWM_minus_In();}
+						 	 Set_PWM_minus_In();\}
 
 	#define Swtich_PWM_Port(port) {if(port<1){Set_PWM_plus_In();Set_PWM_minus_Out();} else{Set_PWM_plus_Out();Set_PWM_minus_In();}}	
 
