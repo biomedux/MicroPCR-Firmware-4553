@@ -158,6 +158,162 @@ ToolArgsString=-Ou- -Ot- -Ob- -Op- -Or- -Od- -Opa-
 TraceCmdString=
 DebugOptions=-D__DEBUG
 [File012]
+Location=C:\Users\SIRI\Desktop\MicroPCR_Firmware\OBJECTS\usb_device.o
+Folder=Intermediary
+DeviceName=PIC18F4553
+LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
+LanguageToolID={E56A1C86-9D32-4DF6-8C34-FE0388B1B644}
+LanguageToolLocation=C:\MCC18\bin\mcc18.exe
+PPAD=$(BINDIR)|./OUTPUT||$(TMPDIR)|./OBJECTS||$(AINDIR)||$(INCDIR)|C:\MCC18\h||$(LIBDIR)|C:\MCC18\lib||$(LKRDIR)||
+SOLK=<src>|USB\usb_device.c|USB\usb_function_hid.c|CONFIG\Init.c|CONFIG\Pragma.c|DEFINE\GlobalTypeVars.c|PCR\Timer.c|main.c|TOOLS\Delay.c|USB\usb_descriptors.c|PCR\PCRTask.c|PCR\Temp_Table.c|USB\Usb_Task.c||<obj>||<lib>||<lkr>|rm18f4553 - HID Bootload.lkr||
+SuiteArgsString=
+ToolArgsString=-Ou- -Ot- -Ob- -Op- -Or- -Od- -Opa-
+TraceCmdString=
+DebugOptions=-D__DEBUG
+[File013]
+Location=C:\Users\SIRI\Desktop\MicroPCR_Firmware\OBJECTS\usb_function_hid.o
+Folder=Intermediary
+DeviceName=PIC18F4553
+LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
+LanguageToolID={E56A1C86-9D32-4DF6-8C34-FE0388B1B644}
+LanguageToolLocation=C:\MCC18\bin\mcc18.exe
+PPAD=$(BINDIR)|./OUTPUT||$(TMPDIR)|./OBJECTS||$(AINDIR)||$(INCDIR)|C:\MCC18\h||$(LIBDIR)|C:\MCC18\lib||$(LKRDIR)||
+SOLK=<src>|USB\usb_device.c|USB\usb_function_hid.c|CONFIG\Init.c|CONFIG\Pragma.c|DEFINE\GlobalTypeVars.c|PCR\Timer.c|main.c|TOOLS\Delay.c|USB\usb_descriptors.c|PCR\PCRTask.c|PCR\Temp_Table.c|USB\Usb_Task.c||<obj>||<lib>||<lkr>|rm18f4553 - HID Bootload.lkr||
+SuiteArgsString=
+ToolArgsString=-Ou- -Ot- -Ob- -Op- -Or- -Od- -Opa-
+TraceCmdString=
+DebugOptions=-D__DEBUG
+[File014]
+Location=C:\Users\SIRI\Desktop\MicroPCR_Firmware\OBJECTS\Init.o
+Folder=Intermediary
+DeviceName=PIC18F4553
+LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
+LanguageToolID={E56A1C86-9D32-4DF6-8C34-FE0388B1B644}
+LanguageToolLocation=C:\MCC18\bin\mcc18.exe
+PPAD=$(BINDIR)|./OUTPUT||$(TMPDIR)|./OBJECTS||$(AINDIR)||$(INCDIR)|C:\MCC18\h||$(LIBDIR)|C:\MCC18\lib||$(LKRDIR)||
+SOLK=<src>|USB\usb_device.c|USB\usb_function_hid.c|CONFIG\Init.c|CONFIG\Pragma.c|DEFINE\GlobalTypeVars.c|PCR\Timer.c|main.c|TOOLS\Delay.c|USB\usb_descriptors.c|PCR\PCRTask.c|PCR\Temp_Table.c|USB\Usb_Task.c||<obj>||<lib>||<lkr>|rm18f4553 - HID Bootload.lkr||
+SuiteArgsString=
+ToolArgsString=-Ou- -Ot- -Ob- -Op- -Or- -Od- -Opa-
+TraceCmdString=
+DebugOptions=-D__DEBUG
+[File015]
+Location=C:\Users\SIRI\Desktop\MicroPCR_Firmware\OBJECTS\Pragma.o
+Folder=Intermediary
+DeviceName=PIC18F4553
+LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
+LanguageToolID={E56A1C86-9D32-4DF6-8C34-FE0388B1B644}
+LanguageToolLocation=C:\MCC18\bin\mcc18.exe
+PPAD=$(BINDIR)|./OUTPUT||$(TMPDIR)|./OBJECTS||$(AINDIR)||$(INCDIR)|C:\MCC18\h||$(LIBDIR)|C:\MCC18\lib||$(LKRDIR)||
+SOLK=<src>|USB\usb_device.c|USB\usb_function_hid.c|CONFIG\Init.c|CONFIG\Pragma.c|DEFINE\GlobalTypeVars.c|PCR\Timer.c|main.c|TOOLS\Delay.c|USB\usb_descriptors.c|PCR\PCRTask.c|PCR\Temp_Table.c|USB\Usb_Task.c||<obj>||<lib>||<lkr>|rm18f4553 - HID Bootload.lkr||
+SuiteArgsString=
+ToolArgsString=-Ou- -Ot- -Ob- -Op- -Or- -Od- -Opa-
+TraceCmdString=
+DebugOptions=-D__DEBUG
+[File016]
+Location=C:\Users\SIRI\Desktop\MicroPCR_Firmware\OBJECTS\GlobalTypeVars.o
+Folder=Intermediary
+DeviceName=PIC18F4553
+LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
+LanguageToolID={E56A1C86-9D32-4DF6-8C34-FE0388B1B644}
+LanguageToolLocation=C:\MCC18\bin\mcc18.exe
+PPAD=$(BINDIR)|./OUTPUT||$(TMPDIR)|./OBJECTS||$(AINDIR)||$(INCDIR)|C:\MCC18\h||$(LIBDIR)|C:\MCC18\lib||$(LKRDIR)||
+SOLK=<src>|USB\usb_device.c|USB\usb_function_hid.c|CONFIG\Init.c|CONFIG\Pragma.c|DEFINE\GlobalTypeVars.c|PCR\Timer.c|main.c|TOOLS\Delay.c|USB\usb_descriptors.c|PCR\PCRTask.c|PCR\Temp_Table.c|USB\Usb_Task.c||<obj>||<lib>||<lkr>|rm18f4553 - HID Bootload.lkr||
+SuiteArgsString=
+ToolArgsString=-Ou- -Ot- -Ob- -Op- -Or- -Od- -Opa-
+TraceCmdString=
+DebugOptions=-D__DEBUG
+[File017]
+Location=C:\Users\SIRI\Desktop\MicroPCR_Firmware\OBJECTS\Timer.o
+Folder=Intermediary
+DeviceName=PIC18F4553
+LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
+LanguageToolID={E56A1C86-9D32-4DF6-8C34-FE0388B1B644}
+LanguageToolLocation=C:\MCC18\bin\mcc18.exe
+PPAD=$(BINDIR)|./OUTPUT||$(TMPDIR)|./OBJECTS||$(AINDIR)||$(INCDIR)|C:\MCC18\h||$(LIBDIR)|C:\MCC18\lib||$(LKRDIR)||
+SOLK=<src>|USB\usb_device.c|USB\usb_function_hid.c|CONFIG\Init.c|CONFIG\Pragma.c|DEFINE\GlobalTypeVars.c|PCR\Timer.c|main.c|TOOLS\Delay.c|USB\usb_descriptors.c|PCR\PCRTask.c|PCR\Temp_Table.c|USB\Usb_Task.c||<obj>||<lib>||<lkr>|rm18f4553 - HID Bootload.lkr||
+SuiteArgsString=
+ToolArgsString=-Ou- -Ot- -Ob- -Op- -Or- -Od- -Opa-
+TraceCmdString=
+DebugOptions=-D__DEBUG
+[File018]
+Location=C:\Users\SIRI\Desktop\MicroPCR_Firmware\OBJECTS\main.o
+Folder=Intermediary
+DeviceName=PIC18F4553
+LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
+LanguageToolID={E56A1C86-9D32-4DF6-8C34-FE0388B1B644}
+LanguageToolLocation=C:\MCC18\bin\mcc18.exe
+PPAD=$(BINDIR)|./OUTPUT||$(TMPDIR)|./OBJECTS||$(AINDIR)||$(INCDIR)|C:\MCC18\h||$(LIBDIR)|C:\MCC18\lib||$(LKRDIR)||
+SOLK=<src>|USB\usb_device.c|USB\usb_function_hid.c|CONFIG\Init.c|CONFIG\Pragma.c|DEFINE\GlobalTypeVars.c|PCR\Timer.c|main.c|TOOLS\Delay.c|USB\usb_descriptors.c|PCR\PCRTask.c|PCR\Temp_Table.c|USB\Usb_Task.c||<obj>||<lib>||<lkr>|rm18f4553 - HID Bootload.lkr||
+SuiteArgsString=
+ToolArgsString=-Ou- -Ot- -Ob- -Op- -Or- -Od- -Opa-
+TraceCmdString=
+DebugOptions=-D__DEBUG
+[File019]
+Location=C:\Users\SIRI\Desktop\MicroPCR_Firmware\OBJECTS\Delay.o
+Folder=Intermediary
+DeviceName=PIC18F4553
+LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
+LanguageToolID={E56A1C86-9D32-4DF6-8C34-FE0388B1B644}
+LanguageToolLocation=C:\MCC18\bin\mcc18.exe
+PPAD=$(BINDIR)|./OUTPUT||$(TMPDIR)|./OBJECTS||$(AINDIR)||$(INCDIR)|C:\MCC18\h||$(LIBDIR)|C:\MCC18\lib||$(LKRDIR)||
+SOLK=<src>|USB\usb_device.c|USB\usb_function_hid.c|CONFIG\Init.c|CONFIG\Pragma.c|DEFINE\GlobalTypeVars.c|PCR\Timer.c|main.c|TOOLS\Delay.c|USB\usb_descriptors.c|PCR\PCRTask.c|PCR\Temp_Table.c|USB\Usb_Task.c||<obj>||<lib>||<lkr>|rm18f4553 - HID Bootload.lkr||
+SuiteArgsString=
+ToolArgsString=-Ou- -Ot- -Ob- -Op- -Or- -Od- -Opa-
+TraceCmdString=
+DebugOptions=-D__DEBUG
+[File020]
+Location=C:\Users\SIRI\Desktop\MicroPCR_Firmware\OBJECTS\usb_descriptors.o
+Folder=Intermediary
+DeviceName=PIC18F4553
+LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
+LanguageToolID={E56A1C86-9D32-4DF6-8C34-FE0388B1B644}
+LanguageToolLocation=C:\MCC18\bin\mcc18.exe
+PPAD=$(BINDIR)|./OUTPUT||$(TMPDIR)|./OBJECTS||$(AINDIR)||$(INCDIR)|C:\MCC18\h||$(LIBDIR)|C:\MCC18\lib||$(LKRDIR)||
+SOLK=<src>|USB\usb_device.c|USB\usb_function_hid.c|CONFIG\Init.c|CONFIG\Pragma.c|DEFINE\GlobalTypeVars.c|PCR\Timer.c|main.c|TOOLS\Delay.c|USB\usb_descriptors.c|PCR\PCRTask.c|PCR\Temp_Table.c|USB\Usb_Task.c||<obj>||<lib>||<lkr>|rm18f4553 - HID Bootload.lkr||
+SuiteArgsString=
+ToolArgsString=-Ou- -Ot- -Ob- -Op- -Or- -Od- -Opa-
+TraceCmdString=
+DebugOptions=-D__DEBUG
+[File021]
+Location=C:\Users\SIRI\Desktop\MicroPCR_Firmware\OBJECTS\PCRTask.o
+Folder=Intermediary
+DeviceName=PIC18F4553
+LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
+LanguageToolID={E56A1C86-9D32-4DF6-8C34-FE0388B1B644}
+LanguageToolLocation=C:\MCC18\bin\mcc18.exe
+PPAD=$(BINDIR)|./OUTPUT||$(TMPDIR)|./OBJECTS||$(AINDIR)||$(INCDIR)|C:\MCC18\h||$(LIBDIR)|C:\MCC18\lib||$(LKRDIR)||
+SOLK=<src>|USB\usb_device.c|USB\usb_function_hid.c|CONFIG\Init.c|CONFIG\Pragma.c|DEFINE\GlobalTypeVars.c|PCR\Timer.c|main.c|TOOLS\Delay.c|USB\usb_descriptors.c|PCR\PCRTask.c|PCR\Temp_Table.c|USB\Usb_Task.c||<obj>||<lib>||<lkr>|rm18f4553 - HID Bootload.lkr||
+SuiteArgsString=
+ToolArgsString=-Ou- -Ot- -Ob- -Op- -Or- -Od- -Opa-
+TraceCmdString=
+DebugOptions=-D__DEBUG
+[File022]
+Location=C:\Users\SIRI\Desktop\MicroPCR_Firmware\OBJECTS\Temp_Table.o
+Folder=Intermediary
+DeviceName=PIC18F4553
+LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
+LanguageToolID={E56A1C86-9D32-4DF6-8C34-FE0388B1B644}
+LanguageToolLocation=C:\MCC18\bin\mcc18.exe
+PPAD=$(BINDIR)|./OUTPUT||$(TMPDIR)|./OBJECTS||$(AINDIR)||$(INCDIR)|C:\MCC18\h||$(LIBDIR)|C:\MCC18\lib||$(LKRDIR)||
+SOLK=<src>|USB\usb_device.c|USB\usb_function_hid.c|CONFIG\Init.c|CONFIG\Pragma.c|DEFINE\GlobalTypeVars.c|PCR\Timer.c|main.c|TOOLS\Delay.c|USB\usb_descriptors.c|PCR\PCRTask.c|PCR\Temp_Table.c|USB\Usb_Task.c||<obj>||<lib>||<lkr>|rm18f4553 - HID Bootload.lkr||
+SuiteArgsString=
+ToolArgsString=-Ou- -Ot- -Ob- -Op- -Or- -Od- -Opa-
+TraceCmdString=
+DebugOptions=-D__DEBUG
+[File023]
+Location=C:\Users\SIRI\Desktop\MicroPCR_Firmware\OBJECTS\Usb_Task.o
+Folder=Intermediary
+DeviceName=PIC18F4553
+LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
+LanguageToolID={E56A1C86-9D32-4DF6-8C34-FE0388B1B644}
+LanguageToolLocation=C:\MCC18\bin\mcc18.exe
+PPAD=$(BINDIR)|./OUTPUT||$(TMPDIR)|./OBJECTS||$(AINDIR)||$(INCDIR)|C:\MCC18\h||$(LIBDIR)|C:\MCC18\lib||$(LKRDIR)||
+SOLK=<src>|USB\usb_device.c|USB\usb_function_hid.c|CONFIG\Init.c|CONFIG\Pragma.c|DEFINE\GlobalTypeVars.c|PCR\Timer.c|main.c|TOOLS\Delay.c|USB\usb_descriptors.c|PCR\PCRTask.c|PCR\Temp_Table.c|USB\Usb_Task.c||<obj>||<lib>||<lkr>|rm18f4553 - HID Bootload.lkr||
+SuiteArgsString=
+ToolArgsString=-Ou- -Ot- -Ob- -Op- -Or- -Od- -Opa-
+TraceCmdString=
+DebugOptions=-D__DEBUG
+[File024]
 Location=C:\Users\YJ\Desktop\MicroPCR_Firmware\.\OUTPUT\microPCR.cof
 Folder=Output
 DeviceName=PIC18F4553
@@ -170,8 +326,34 @@ SuiteArgsString=
 ToolArgsString=/o"$(BINDIR_)$(TARGETBASE).cof" /M"$(BINDIR_)$(TARGETBASE).map" /W
 TraceCmdString=
 DebugOptions=/z__MPLAB_DEBUG=1
-[File013]
+[File025]
 Location=C:\Users\YJ\Desktop\MicroPCR_Firmware\.\OUTPUT\microPCR.hex
+Folder=Output
+DeviceName=PIC18F4553
+LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
+LanguageToolID={96C98149-AA1B-4CF9-B967-FAE79CAB663C}
+LanguageToolLocation=C:\MCC18\bin\mplink.exe
+PPAD=$(BINDIR)|./OUTPUT||$(TMPDIR)|./OBJECTS||$(AINDIR)||$(INCDIR)|C:\MCC18\h||$(LIBDIR)|C:\MCC18\lib||$(LKRDIR)||
+SOLK=<src>|USB\usb_device.c|USB\usb_function_hid.c|CONFIG\Init.c|CONFIG\Pragma.c|DEFINE\GlobalTypeVars.c|PCR\Timer.c|main.c|TOOLS\Delay.c|USB\usb_descriptors.c|PCR\PCRTask.c|PCR\Temp_Table.c|USB\Usb_Task.c||<obj>||<lib>||<lkr>|rm18f4553 - HID Bootload.lkr||
+SuiteArgsString=
+ToolArgsString=/o"$(BINDIR_)$(TARGETBASE).cof" /M"$(BINDIR_)$(TARGETBASE).map" /W
+TraceCmdString=
+DebugOptions=/z__MPLAB_DEBUG=1
+[File026]
+Location=C:\Users\SIRI\Desktop\MicroPCR_Firmware\.\OUTPUT\microPCR.cof
+Folder=Output
+DeviceName=PIC18F4553
+LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
+LanguageToolID={96C98149-AA1B-4CF9-B967-FAE79CAB663C}
+LanguageToolLocation=C:\MCC18\bin\mplink.exe
+PPAD=$(BINDIR)|./OUTPUT||$(TMPDIR)|./OBJECTS||$(AINDIR)||$(INCDIR)|C:\MCC18\h||$(LIBDIR)|C:\MCC18\lib||$(LKRDIR)||
+SOLK=<src>|USB\usb_device.c|USB\usb_function_hid.c|CONFIG\Init.c|CONFIG\Pragma.c|DEFINE\GlobalTypeVars.c|PCR\Timer.c|main.c|TOOLS\Delay.c|USB\usb_descriptors.c|PCR\PCRTask.c|PCR\Temp_Table.c|USB\Usb_Task.c||<obj>||<lib>||<lkr>|rm18f4553 - HID Bootload.lkr||
+SuiteArgsString=
+ToolArgsString=/o"$(BINDIR_)$(TARGETBASE).cof" /M"$(BINDIR_)$(TARGETBASE).map" /W
+TraceCmdString=
+DebugOptions=/z__MPLAB_DEBUG=1
+[File027]
+Location=C:\Users\SIRI\Desktop\MicroPCR_Firmware\.\OUTPUT\microPCR.hex
 Folder=Output
 DeviceName=PIC18F4553
 LanguageToolSuiteID={5B7D72DD-9861-47BD-9F60-2BE967BF8416}

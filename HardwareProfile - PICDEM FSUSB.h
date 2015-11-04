@@ -106,7 +106,7 @@
 	#define LED_WG		LATDbits.LATD0    
 	#define LED_R		LATDbits.LATD1
 	#define LED_B		LATDbits.LATD3
-	#define LED_G		LATDbits.LATD3
+	#define LED_G		LATDbits.LATD2
 	
 	#define LED_WG_ON()         	LED_WG = 0; 
     #define LED_WG_OFF()        	LED_WG = 1;

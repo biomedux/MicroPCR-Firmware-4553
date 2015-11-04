@@ -252,6 +252,8 @@ void Command_Setting(void)
 
 				compensation = COMPENSATION_DEFAULT - (rxBuffer.compensation * COMPENSATION_UNIT);
 
+				Init_PWM_MODE();
+
 				Run_Task();
 			}
 			else if( currentState == STATE_RUNNING )
@@ -376,8 +378,7 @@ void PID_Control(void)
 void Stop_Task(void)
 {
 	currentState = STATE_READY;
-	CCPR1L = (BYTE)(0x00>>2);
-	CCP1CON = ((CCP1CON&0xCF) | (BYTE)((0x00&0x03)<<4));
+	Stop_PWM_MODE();
 	Fan_OFF();
 }
 
