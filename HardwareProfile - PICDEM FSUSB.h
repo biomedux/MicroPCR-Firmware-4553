@@ -194,8 +194,8 @@
 	#define SetVREF()	{ADCON1= (ADCON1 & 0b11001111) | ((ADC_VCFG_VREF_RA2 | ADC_VCFG_VREF_RA3)&0b00110000);}
 	#define SetADCSampleFormat(DIR)	{ADCON2 = (ADCON2 & 0b01111111) | (DIR&0b10000000);}
 	#define SetADCAcqTime(TIME)	{ADCON2= (ADCON2&0b11000111) | (TIME&0b00111000);}
-	#define SetADCConvClock(CLOCK)	{ADCON2= (ADCON2&0b11111000) | (CLOCK & 0b00000011);}
-
+	#define SetADCConvClock(CLOCK)  {ADCON2= (ADCON2&0b11111000) | (CLOCK & 0b00000111);}
+	
 	#define InitADC()	{Set_ADC_INPUT();\
 						 SetVREF();\
 						 SetADCSampleFormat(RIGHT_ADJUST);\

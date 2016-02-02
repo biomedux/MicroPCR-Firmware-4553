@@ -82,7 +82,6 @@ WORD ReadTemperature(BYTE sensor)
 	BYTE high=0x00;
 	BYTE counter = SAMPLING_COUNT;   // multiple adc sampling
 	WORD sum=0;
-	WORD delay_cnt;	// 16-02-01 SCLee
 
 	// Select the ADC Channel by parameter.
 	// The ADC Channel information shows in HardwareProfile -PICDEM FSUSB.h file.
@@ -98,11 +97,6 @@ WORD ReadTemperature(BYTE sensor)
 			SetADCChannel(Sensor_Heatsink);
 			break;
 	}
-
-	// 16-02-01 SCLee
-	// add 2.45us delay
-	for(delay_cnt = 0; delay_cnt < 10; delay_cnt++);
-	do{ delay_cnt--; } while(delay_cnt);	// about 5us expected
 
 	while(counter--)
 	{

@@ -1,81 +1,84 @@
 # MicroPCR_Firmware
+# Photodiode 와 temperature sensor 간섭 문제 #
 
-# Photodiode and temperature sensor interference 문제 #
+**2016-02-02 김종대**
 
-2016-01-29 김 종 대
+**Experimenter: 이승철, 이득주**
 
-### 1.	현상 ###
-	Photodiode를 막거나 열었을 때 0~5V까지 변하고 이로 인하여 측정 온도 값이 변한다.
-	5V일 때와 0V 일 때 약 상온에서 약 7도 정도 차이가 난다.
+1. 간섭문제의 원인으로 예상되는 것은 Photodiode input이 Vref=3.3V를 넘게 input으로 들어가서 이것으로 보임.
 
-### 2.	문제 분석 ###
-	HW를 검토한 결과 PIC에서 interference가 일어나는 것으로 확인되어 ADC 동작을 분석하기 시작함.
+	A. Analog input에 5V를 직접 연결하면 5.6도 올라간다
+
+	B. 3.3V 를 연결하면 온도의 변화가 없다
+
+	C. Temperature ADC 시작전에 한번 ADC를 하면 5V 입력일 때보다 0.7도 낮아진다.
 
 
- 
-**\#define InitADC()**
+2. 결론: Photodiode가 4096를 넘기 전까지는 문제가 없을 것으로 생각되며, 차후 3.3V를 넘지 못하게 하는 회로가 필요할 것으로 생각된다.
 
-	{
-		Set_ADC_INPUT();\
-		SetVREF();\
-		SetADCSampleFormat(RIGHT_ADJUST);\
-		SetADCChannel(ADC_CHAMBER);\
-		SetADCAcqTime(ADC_ACQT_06TAD);\
-		SetADCConvClock(ADC_ADCS_FREQD64);\
-		ADC_ADON();
-	}
+3. 추가로 발견된 SW flaw
 
-Conversion time: tc=6TAD+12TAD=18TAD
+	**A.	ADC conversion clock setting 오류**
 
-Sampling clock: TAD = FREQD64=48M/64=0.75M=1.3us
+		HardwareProfile - PICDEM FSUSB.h를 보면 아래 2line으로 ADC conversion clock을 만드는 데 파란색 부분이 111이 되어야 한다.
+		이와 같은 오류로 해서 Fosc/64로 했으나 사실은 Fosc/32가 된다.
+		즉, Tad=1/(48M/32)=0.67us (Table 28-29: A/D conversion requirement에 어긋남)
 
-그러므로 **conversion time = 24us** 이다.
+		#define SetADCConvClock(CLOCK)	{ADCON2= (ADCON2&0b11111000) | (CLOCK & 0b00000011);}
+		#define ADC_ADCS_FREQD64		(0b00000110)
 
-**21.1 A/D Acquisition Requirements**
+		한편 sampling time 인 Tacq는 아래에 의하면 6*Tad 이므로 4us 이다
+		
+		#define SetADCAcqTime(TIME)	{ADCON2= (ADCON2&0b11000111) | (TIME&0b00111000);}
+		#define ADC_ACQT_06TAD			(0b00011000)
 
-	… After the analog input channel is selected (changed), the channel must be sampled for at least the minimum acquisition time before starting a conversion …
+	**B.	수정**
 
-	TACQ = Amplifier Settling Time + Holding Capacitor Charging Time + Temperature Coefficient 
-		 = TAMP + TC + TCOFF = 2.45 us
+		#define SetADCConvClock(CLOCK)	{ADCON2= (ADCON2&0b11111000) | (CLOCK & 0b00000111);}
 
-	Instruction execution: Tcyc=12Mhz
+		Tad=1/(48M/64)=1.33 us
+		Tacq=8us > 2.35us (channel change후 requirement)
+		Tc = 6Tad+12Tad=18Tad=24us
 
-PCRtask()는 T2MS_Flag가 True일 때 동작하므로 2ms 마다 동작할 것이다. (init.c main_looper)
-PCR_Task() 안에서는 Sensor_Task()가 매번 불리워지므로 2ms 마다 불리울 것이다.
-Sensor_Task)()에서는 ReadTemperature(ADC_CHAMBER)를 부르고 바로 ReadPhotodiode()를 부른다.
- ReadPhotodiode()에서는 ReadTemperatgure(ADC_PHOTODIODE)를 부르므로 다음과 같이 계속해서 수행될 것이다.
+		10번 ADC하는 데 걸리는 시간 240us
 
-Do every 2m:
+	**C.	ADC 시간 실험 (README.docx 파일 참고)**
 
-	Sensor_chamber설정
-	ADC 10번 // 여기까지 약 250us
-	Sensor_photodiode설정
-	ADC 10번 // 여기까지 약 500us
+	![ADC는 두번 실행되고 약 260us정도 됨](http://imgur.com/XbCMSUg)
+		
+	ADC는 두번 실행되고 약 260us정도 됨
+	
+	**D.	과거 실험 (README.docx 파일 참고)**
 
-여기서 문제는 sensor_chamber를 설정하자마자 ADC에 들어가는 것이 문제이다.
+		Tad=1/(48M/32)=0.67us 이고, ADC_ACQT_20TAD 일 때 10번 ADC loop 결과
+		Tc=32Tad=21.4us
 
-	첫번째 ADC를 하는 것은 Photodiode전압일 것이다.
-	그러므로 chamber 온도 전압이 0.5v이면 (5+9*0.5)/10=0.95V까지 올라갈 수 있다.
-	물론 decay하기 때문에 그 정도는 아니겠지만 상당히 많이 전압이 올라갈 수 있다.
+		10번 ADC 하는 데 걸리는 시간 214us
+	![](http://imgur.com/DwTRvIa)
 
-### 3. 해결방안 ###
+	**E.	Main loop period가 3ms인 문제**
 
-A.	PIC18F4550에서 recommend한 대로 ADC channel switching하고 최소 2.45usec의 delay를 주도록한다.
+		이번 측정에서 전체 주기가 3ms인 것은 아래 code문제임.
+		Counter가 ‘0’이 된 후에 1ms후에 1이 되고 다시 increment한다.
+		다시 1ms 후에 2가 되고 1ms후에 if condition으로 check되어 0으로 reset됨.
 
-PCRTask.c 안에 ReadTemperature(BYTE sensor) 안에
-
-	switch(sensor)
-	{
-		…
-	}
-
-	//여기에 2.45us 이상 delay 추가
-	WORD delay_cnt;
-	for (delay_cnt=0;delay_cnt<10;delay_cnt++); //약 5us예상
-
-	do { delay_cnt--;} while(delay_cnt);
-
-	while(counter--)
-	{
-		…
-	}
+		if( T2MS_Counter >= 2 )
+		{
+			T2MS_Flag = TRUE;
+			T2MS_Counter = 0;	
+			T30MS_Counter++;
+		}
+		else
+		{
+			T2MS_Counter++;
+		}
+		
+		2ms 마다 reset하려면 아래와 같이 수정해야 함.
+		
+		T2MS_Counter++;
+		if( T2MS_Counter >= 2 )
+		{
+			T2MS_Flag = TRUE;
+			T2MS_Counter = 0;	
+			T30MS_Counter++;
+		}
