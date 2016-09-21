@@ -47,6 +47,8 @@ BYTE fanFlag = 0;
 * Function : void PCR_Task(void)
 * This function is overall routine for microPCR
 **********************************/
+
+
 void PCR_Task(void)
 {
 	// Check the cmd buffer, performing the specific task.
@@ -55,11 +57,17 @@ void PCR_Task(void)
 	// Sensing the adc values(for photodiode, chamber, heatsink)
 	Sensor_Task();
 	
-	if( rxBuffer.ledControl ){
-		LED_WG = rxBuffer.led_wg;
-		LED_R = rxBuffer.led_r;
-		LED_G = rxBuffer.led_g;
-		LED_B = rxBuffer.led_b;
+	if( rxBuffer.ledControl )
+	{
+		// 160921 SCLee
+		wg_ledCtrl		= (UINT)rxBuffer.led_wg;
+		r_ledCtrl		= (UINT)rxBuffer.led_r;
+		g_ledCtrl		= (UINT)rxBuffer.led_g;
+		b_ledCtrl		= (UINT)rxBuffer.led_b;
+		wg_ledPwmDuty	= (UINT)rxBuffer.led_wg_pwm;
+		r_ledPwmDuty	= (UINT)rxBuffer.led_r_pwm;
+		g_ledPwmDuty	= (UINT)rxBuffer.led_g_pwm;
+		b_ledPwmDuty	= (UINT)rxBuffer.led_b_pwm;
 	}
 
 	// Setting the tx buffer by structed buffer.

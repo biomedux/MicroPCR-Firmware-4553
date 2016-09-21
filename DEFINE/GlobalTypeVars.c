@@ -22,6 +22,17 @@ BYTE fallingTargetArrival = 0;
 // 150930 YJ
 UINT powerCounter = 0;
 
+// 160921 SCLee
+UINT wg_ledCtrl = 0;
+UINT r_ledCtrl = 0;
+UINT g_ledCtrl = 0;
+UINT b_ledCtrl = 0;
+UINT wg_ledPwmDuty = 0;
+UINT r_ledPwmDuty = 0;
+UINT g_ledPwmDuty = 0;
+UINT b_ledPwmDuty = 0;
+UINT tmr0l_temp = 0;
+
 RxBuffer rxBuffer;
 TxBuffer txBuffer;
 

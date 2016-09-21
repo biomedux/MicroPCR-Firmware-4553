@@ -55,7 +55,8 @@ file_027=.
 file_028=.
 file_029=PCR
 file_030=PCR
-file_031=.
+file_031=PCR
+file_032=.
 [GENERATED_FILES]
 file_000=no
 file_001=no
@@ -89,6 +90,7 @@ file_028=no
 file_029=no
 file_030=no
 file_031=no
+file_032=no
 [OTHER_FILES]
 file_000=no
 file_001=no
@@ -122,6 +124,7 @@ file_028=no
 file_029=no
 file_030=no
 file_031=no
+file_032=no
 [FILE_INFO]
 file_000=USB\usb_device.c
 file_001=USB\usb_function_hid.c
@@ -154,7 +157,8 @@ file_027=HardwareProfile - PICDEM FSUSB.h
 file_028=HardwareProfile.h
 file_029=PCR\PCRTask.h
 file_030=PCR\Temp_Table.h
-file_031=rm18f4553 - HID Bootload.lkr
+file_031=PCR\Timer.h
+file_032=rm18f4553 - HID Bootload.lkr
 [SUITE_INFO]
 suite_guid={5B7D72DD-9861-47BD-9F60-2BE967BF8416}
 suite_state=

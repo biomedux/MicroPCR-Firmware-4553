@@ -193,6 +193,9 @@ void InitializeDevice(void)
 	// Initilaize the user buffer
 	InitializeUser();
 
+	// 160921 SCLee
+	TIMR0_init();
+
 	// Initialize the timer for counting 2ms
 	TIMR1_init();
 }

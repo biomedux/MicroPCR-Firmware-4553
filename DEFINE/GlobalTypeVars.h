@@ -27,6 +27,17 @@ extern BYTE fallingTargetArrival;
 // 150930 YJ For PWM Power Test
 extern UINT powerCounter;
 
+// 160921 SCLee
+extern UINT wg_ledCtrl;
+extern UINT r_ledCtrl;
+extern UINT g_ledCtrl;
+extern UINT b_ledCtrl;
+extern UINT wg_ledPwmDuty;
+extern UINT r_ledPwmDuty;
+extern UINT g_ledPwmDuty;
+extern UINT b_ledPwmDuty;
+extern UINT tmr0l_temp;
+
 /** Protect buffer *********************************/
 extern RxBuffer rxBuffer;
 extern TxBuffer txBuffer;

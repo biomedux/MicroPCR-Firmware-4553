@@ -59,7 +59,12 @@ typedef struct _RXBUFFER
 
 	BYTE compensation;
 
-	BYTE reserved_for_64byte[38];
+	BYTE led_wg_pwm;
+	BYTE led_r_pwm;
+	BYTE led_g_pwm;
+	BYTE led_b_pwm;
+
+	BYTE reserved_for_64byte[34];
 } RxBuffer;
 
 typedef struct _TXBUFFER

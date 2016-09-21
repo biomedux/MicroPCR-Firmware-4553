@@ -119,7 +119,6 @@
 	
 	#define InitLEDs()	{TRISDbits.TRISD0=0;LED_WG_OFF();TRISDbits.TRISD1=0;LED_R_OFF();TRISDbits.TRISD2=0;LED_B_OFF();TRISDbits.TRISD3=0;LED_G_OFF();}
 
-
     /** SWITCH *********************************************************/
     #define InitSwitches()  TRISBbits.TRISB4=1;
     #define sw2                 PORTBbits.RB4
@@ -241,7 +240,7 @@
 
 	#define Set_PWM_plus_Out()		{LATCbits.LATC2=0;TRISC &= ~(0x04);}
 	#define Set_PWM_minus_Out()		{LATDbits.LATD5=0;TRISD &= ~(0x20);}
-			 
+
 	#define InitPWMPort()	{Set_PWM_plus_Out();\
 						 	 Set_PWM_minus_Out();}
 

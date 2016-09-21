@@ -123,6 +123,8 @@ void YourLowPriorityISRCode();
 		//Clear the interrupt flag
 		//Etc.
 	
+		timer0_isr();
+
 	}	//This return will be a "retfie", since this is in a #pragma interruptlow section 
 
 #elif defined(__C30__)
