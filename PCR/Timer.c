@@ -28,8 +28,8 @@ void TIMR0_init(void)
 	T0CONbits.T0CS = 0;		// Internal instruction cycle clock (CLKO)
 	T0CONbits.PSA=0;		// Timer0 prescaler is assigned. Timer0 clock input comes from prescaler output.
 	
-//	T0CON = 0xC5;
-	T0CON = 0xC4;
+	T0CON = 0xC5;
+//	T0CON = 0xC4;
 
 	//8bit setting
 	TMR0L = 0x06;
