@@ -186,6 +186,23 @@ ROM BYTE *pTemp_Chamber = (ROM BYTE *)&NTC_CHAMBER_TABLE;
 
 void Sensor_Task(void)
 {
+#ifdef EMULATOR
+
+	if( currentState == STATE_RUNNING ){
+		if(prevTargetTemp>currentTargetTemp ){
+			currentTemp -= 0.02;
+			if(currentTemp <= currentTargetTemp){
+				currentTemp = currentTargetTemp;
+			}
+		}
+		else{
+			currentTemp += 0.02;
+			if(currentTemp >= currentTargetTemp){
+				currentTemp = currentTargetTemp;
+			}
+		}
+	}
+#else
 	double r, InRs, tmp, adc;
 	WORD chamber = ReadTemperature(ADC_CHAMBER);
 	WORD photodiode = ReadPhotodiode();
@@ -222,6 +239,7 @@ void Sensor_Task(void)
 	memcpy(temp_buffer2, temp_buffer, 5*sizeof(float));
 
 	currentTemp = (float)quickSort(temp_buffer2, 5);
+#endif
 }
 
 /**********************************
@@ -247,8 +265,14 @@ void Command_Setting(void)
 	switch( rxBuffer.cmd )
 	{
 		case CMD_READY:
-			if( currentState == STATE_RUNNING )
+			if( currentState == STATE_RUNNING ){
 				Run_Task();
+			}
+#ifdef EMULATOR
+			else{
+				currentTemp = 20.0;
+			}
+#endif
 			break;
 		case CMD_PCR_RUN:
 			if( currentState == STATE_READY )

@@ -20,7 +20,7 @@
 #define PWM_POWER_DUTY		1
 #define PWM_FIRST_MAX		1024
 
-//#define EMULATOR 
+// #define EMULATOR 
 
 typedef struct _RXBUFFER
 {
