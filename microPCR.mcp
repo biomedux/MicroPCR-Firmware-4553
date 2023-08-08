@@ -8,8 +8,8 @@ dir_src=
 dir_bin=./OUTPUT
 dir_tmp=./OBJECTS
 dir_sin=
-dir_inc=C:\MCC18\h
-dir_lib=C:\MCC18\lib
+dir_inc=D:\MCC18\h
+dir_lib=D:\MCC18\lib
 dir_lkr=
 [CAT_FILTERS]
 filter_src=*.asm;*.c

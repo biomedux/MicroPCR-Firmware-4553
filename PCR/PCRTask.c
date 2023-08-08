@@ -43,6 +43,12 @@ float compensation = 0;
 
 BYTE fanFlag = 0;
 
+//KJD211012 for optic emulation
+extern struct{int RFU[80];}RFU_TABLE;
+ROM int *pRFU = (ROM int *)&RFU_TABLE;
+int col,idx, pdval, currentCycle; //col: color number, idx, table index, table value
+float fidx; //temporary idx
+
 /**********************************
 * Function : void PCR_Task(void)
 * This function is overall routine for microPCR
@@ -68,6 +74,8 @@ void PCR_Task(void)
 		r_ledPwmDuty	= (UINT)rxBuffer.led_r_pwm;
 		g_ledPwmDuty	= (UINT)rxBuffer.led_g_pwm;
 		b_ledPwmDuty	= (UINT)rxBuffer.led_b_pwm;
+		//KJD211012
+		currentCycle 	= (UINT) rxBuffer.currentCycle;
 	}
 
 	// Setting the tx buffer by structed buffer.
@@ -202,6 +210,19 @@ void Sensor_Task(void)
 			}
 		}
 	}
+	//KJD211012 for optic emul.
+	chamber_h = 25;
+	chamber_l = 1;
+	if ( wg_ledCtrl== 0 ) col=0;
+	if ( r_ledCtrl == 0 ) col=1;
+	if ( g_ledCtrl == 0 ) col=2;
+	if ( b_ledCtrl == 0 ) col=3;
+	fidx = (1.+col*0.33)*(float) currentCycle;
+	idx = (int) fidx;
+	if (idx < 80) pdval=pRFU[idx];
+	else pdval=pRFU[79];
+	photodiode_h = (BYTE) (pdval/256);
+	photodiode_l = (BYTE) (pdval&0xFF);
 #else
 	double r, InRs, tmp, adc;
 	WORD chamber = ReadTemperature(ADC_CHAMBER);

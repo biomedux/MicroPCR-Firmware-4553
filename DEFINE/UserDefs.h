@@ -20,7 +20,7 @@
 #define PWM_POWER_DUTY		1
 #define PWM_FIRST_MAX		1024
 
-// #define EMULATOR 
+// #define EMULATOR 	(1)
 
 typedef struct _RXBUFFER
 {
@@ -64,7 +64,10 @@ typedef struct _RXBUFFER
 	BYTE led_g_pwm;
 	BYTE led_b_pwm;
 
-	BYTE reserved_for_64byte[34];
+	//KJD211012
+	BYTE currentCycle; //30**
+	BYTE reserved_for_64byte[33];//34�� 33���� ��ħ.
+
 } RxBuffer;
 
 typedef struct _TXBUFFER
